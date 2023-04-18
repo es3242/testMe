@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #555;
+            text-align: justify;
+            margin: 20px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Added styles for the buttons and list */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .list-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .list {
+            list-style: none;
+            padding: 0;
+            margin: 20px;
+        }
+
+        .list-item {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<!--<div th:replace="fragments/header :: header"></div>-->
+<div class="button-container" th:fragment="header">
+    <a th:if="${#session != null and #session.getAttribute('user') != null}" href="/add" class="button">자유 게시판 add</a>
+    <a th:if="${#session == null or #session.getAttribute('user') == null}" href="/" onclick="alert('로그인이 필요합니다.'); return false;" class="button">자유 게시판 add</a>
+    <a href="/list" class="button">자유 게시판 list</a>
+    <a th:if="${#session == null or #session.getAttribute('user') == null}" href="/register" class="button">회원가입</a>
+    <a th:if="${#session == null or #session.getAttribute('user') == null}" href="/login" class="button">login</a>
+    <a th:if="${#session != null and #session.getAttribute('user') != null}" href="/logout" class="button">logout</a>
+
+</div>
+
+<h1>Welcome to my webpage</h1>
+<div th:if="${not #strings.isEmpty(message)}" class="alert alert-success">
+    <span th:text="${message}"></span>
+</div>
+<div class="list-container">
+    <ul class="list">
+        <li class="list-item">List Item 1</li>
+        <li class="list-item">List Item 2</li>
+        <li class="list-item">List Item 3</li>
+        <li class="list-item">List Item 4</li>
+    </ul>
+</div>
+</body>
+</html>
