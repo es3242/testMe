@@ -37,6 +37,10 @@ dependencies {
 
 
 	implementation group: 'org.python', name: 'jython-slim', version: '2.7.3'
+
+
+
+	implementation 'org.apache.pdfbox:pdfbox:2.0.24'
 }
 
 test {
