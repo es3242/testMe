@@ -1,51 +1,145 @@
 package com.study.board.controller;
 
+import com.study.board.entity.Pdf;
+import com.study.board.entity.User;
+import com.study.board.repository.PdfRepository;
+import com.study.board.repository.UserRepository;
+import com.study.board.service.PdfService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
-import java.io.IOException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 public class PdfUpController {
+    @Autowired
+    PdfService pdfService = new PdfService();
 
     @GetMapping("/pdfup")
     public String pdfloding() {
         return "pdf/pdfup";
     }
 
-
     @PostMapping("/pdfup1")
-    @ResponseBody
-    public String uploadPdf(@RequestParam("pdfFile") MultipartFile file) throws IOException {
-
-        // Set the directory path where the PDF file will be saved.
-        String uploadDir = "C:\\asdasd";
-
-
-        // Create the directory if it doesn't exist.
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
+    public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, @RequestParam("user.id") int userId, RedirectAttributes redirectAttributes) {
+        if (pdfFile.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Please select a PDF file to upload");
+            return "redirect:/pdfup";
         }
 
-        // Save the PDF file to the upload directory.
-        byte[] bytes = file.getBytes();
-        Path path = Paths.get(uploadDir + File.separator + file.getOriginalFilename());
-        Files.write(path, bytes);
+        try {
+            // 파일 저장 위치 설정
+            String uploadDir = "./pdf";
 
-        // Save the file path to the database.
-        String filePath = path.toString();
-        // Code to save the filePath to the database.
-        System.out.println("File path: " + filePath);
+            // 파일 이름 설정
+            String originalFileName = pdfFile.getOriginalFilename();
+            String fileName = StringUtils.cleanPath(originalFileName);
 
-        // Return a success message to the client.
-        String message = "File uploaded successfully!";
-        System.out.println(message);
-        return "File uploaded successfully!";
+            // 파일 경로 설정
+            String fileExtension = "";
+            int i = fileName.lastIndexOf('.');
+            if (i >= 0) {
+                fileExtension = fileName.substring(i + 1);
+                fileName = fileName.substring(0, i);
+            }
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            fileName = fileName + "_" + timestamp + "." + fileExtension;
+            String filePath = Paths.get(uploadDir, fileName).toString();
+
+            System.out.println(filePath);
+            // 파일 저장
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+            stream.write(pdfFile.getBytes());
+            stream.close();
+
+            // PDF 엔티티 생성 및 저장
+            User user = new User();
+            user.setId((long) userId);
+            LocalDateTime createdAt = LocalDateTime.now();
+            Pdf pdf = new Pdf();
+            pdf.setUser(user);
+            pdf.setCreatedAt(createdAt);
+            pdf.setConvertedAt(0);
+            pdf.setFilePath(filePath);
+            pdfService.savePdf(pdf);
+
+            redirectAttributes.addFlashAttribute("message", "PDF file has been uploaded successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "main";
     }
 
+
+
+
+
+
+
+
+
+
+    @Autowired
+    private PdfRepository pdfRepository;
+
+
+
+    @GetMapping("/pdf")
+    public String getPdfList(Model model, HttpSession session) {
+        Long userId = (Long) session.getAttribute("user");
+        List<Pdf> pdfList = pdfService.getPdfListByUserId(userId);
+        model.addAttribute("pdfList", pdfList);
+        return "pdf/pdflist";
+    }
+
+
+
+
+
+    @PostMapping("/pdf/view")
+    public void viewPdf(@RequestParam String filePath, HttpServletResponse response) throws IOException {
+        File file = new File(filePath);
+
+        if (!file.exists() || !file.isFile()) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        response.setContentType("application/pdf");
+        response.addHeader("Content-Disposition", "inline; filename=" + file.getName());
+
+        Files.copy(file.toPath(), response.getOutputStream());
+        response.getOutputStream().flush();
+    }
+
+
+
+
+
+
+
 }
+
+
+
+

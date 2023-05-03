@@ -12,8 +12,8 @@ public class Pdf {
     @Column(name = "PDF_id")
     private int pdfId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
     private User user;
 
     @Column(name = "created_at")
@@ -27,4 +27,45 @@ public class Pdf {
 
 
 
+
+
+    public int getPdfId() {
+        return pdfId;
+    }
+
+    public void setPdfId(int pdfId) {
+        this.pdfId = pdfId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getConvertedAt() {
+        return convertedAt;
+    }
+
+    public void setConvertedAt(int convertedAt) {
+        this.convertedAt = convertedAt;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 }

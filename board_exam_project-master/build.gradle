@@ -35,6 +35,8 @@ dependencies {
 
 	implementation 'org.springframework:spring-web:5.3.9'
 
+
+	implementation group: 'org.python', name: 'jython-slim', version: '2.7.3'
 }
 
 test {
