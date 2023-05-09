@@ -45,9 +45,11 @@ public class UserService {
         return user.orElse(null);
     }
 
-    public Optional<User> getUserContents(String nickname) {
-        return userRepository.findByNickname(nickname);
+    public User getUserContents(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        return user.orElse(null);
     }
+
 
 
 

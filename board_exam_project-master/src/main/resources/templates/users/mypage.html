@@ -1,8 +1,26 @@
 <!DOCTYPE html>
-<html>
-<head>임시 마이페이지</head>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>사용자 페이지</title>
+</head>
 <body>
-<h1>사용자 정보 보여주기~~</h1>
-
+<h1>사용자 정보 보여주기~~<h1>
+    <h3>user_id = <input type="text" th:value="${#session.getAttribute('user')}" name="user.id" id="user" readonly/></h3>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nickname</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${user}" th:if="${u.id == #session.getAttribute('user').id}">
+            <td th:text="${u.id}"></td>
+            <td th:text="${u.nickname}"></td>
+            <td th:text="${u.email}"></td>
+        </tr>
+        </tbody>
+    </table>
 </body>
 </html>
