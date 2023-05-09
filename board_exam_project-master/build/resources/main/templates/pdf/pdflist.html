@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Pdf List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"
+        integrity="sha512-pXhUv1uZcVngs6PwKr7VpAC3KuuvG+NHrT2Cz9g0E1v55uV7sRd/62uV/qdxpKj3HMcB+w8QxNlL9nHpQZuyYQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body>
+<div class="container">
+  <h1 class="text-center mt-5">PDF List</h1>
+  <table class="table table-striped mt-5">
+    <thead>
+    <tr>
+      <th scope="col">PDF ID</th>
+      <th scope="col">Created At</th>
+      <th scope="col">Converted At</th>
+      <th scope="col">File Path</th>
+      <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pdf : ${pdfList}">
+      <td th:text="${pdf.pdfId}"></td>
+      <td th:text="${pdf.createdAt}"></td>
+      <td th:text="${pdf.convertedAt}"></td>
+      <td th:text="${pdf.filePath}"></td>
+      <td>
+        <form th:action="@{/pdf/view}" method="post">
+          <input type="hidden" th:name="filePath" th:value="${pdf.filePath}" />
+          <button type="submit">View</button>
+        </form>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

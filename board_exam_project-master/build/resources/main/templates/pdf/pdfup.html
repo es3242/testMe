@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Upload PDF Form</title>
+</head>
+<body>
+<form action="/pdfup1" method="POST" enctype="multipart/form-data">
+  <input type="text" th:value="${#session.getAttribute('user')}" name="user.id" id="user" readonly/>
+  <label for="pdfFile">Choose a PDF file to upload:</label>
+  <input type="file" id="pdfFile" name="pdfFile"><br><br>
+  <input type="submit" value="Upload PDF">
+</form>
+</body>
+</html>

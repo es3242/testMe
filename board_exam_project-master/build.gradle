@@ -16,6 +16,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -35,6 +36,17 @@ dependencies {
 
 	implementation 'org.springframework:spring-web:5.3.9'
 
+// 자바-파이써 인데 안쓸듯
+	implementation group: 'org.python', name: 'jython-slim', version: '2.7.3'
+
+
+// pdf text 추출
+	implementation 'org.apache.pdfbox:pdfbox:2.0.24'
+
+// 명사 추출하는데 사용
+
+
+	implementation 'com.github.shin285:KOMORAN:3.3.9'
 }
 
 test {
