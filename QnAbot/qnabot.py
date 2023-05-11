@@ -30,29 +30,6 @@ Logger.addHandler(LogHandler)
 # use logger example
 # Logger.info("car is coming")
 
-
-# 전처리 객체 생성
-# try:
-#     p = Preprocess(word2index_dic='./train_tools/dict/chatbot_dict.bin',
-#                    userdic='./utils/user_dic.tsv')
-#     print("텍스트 전처리기 로드 완료..")
-# except: print("텍스트 전처리기 로드 실패..")
-
-# #엑셀 파일 로드
-# try:
-#     df = pd.read_excel('train_tools/qna/train_data.xlsx')
-#     print("엑셀 파일 로드 완료..")
-# except: print("엑셀 파일 로드 실패..")
-
-# # pt 파일 갱신 및 불러오기
-# try:
-#     create_embedding_data = create_embedding_data(df=df, preprocess=p)
-#     create_embedding_data.create_pt_file()
-#     embedding_data = torch.load('train_tools/qna/embedding_data.pt')
-#     print("임베딩 pt 파일 갱신 및 로드 완료..")
-# except: print("임베딩 pt 파일 갱신 및 로드 실패..")
-
-
 def to_client(conn, addr):
     try:
         # 데이터 수신
@@ -69,28 +46,7 @@ def to_client(conn, addr):
         recv_json_data = json.loads(read.decode()) #받음
         print("데이터 수신 : ", recv_json_data)
         query = recv_json_data['Query']
-
-        # # 의도 파악
-        # intent_pred = intent.predict_class(query)
-        # intent_name = intent.labels[intent_pred]
-
-        # # 답변 검색
-        # f = FindAnswer(df=df, embedding_data=embedding_data ,preprocess=p)
-        # selected_qes, score, answer, imageUrl, query_intent = f.search(query, intent_name)
-
-        # if score < 0.6:
-        #     answer = "부정확한 질문이거나 답변할 수 없습니다.\n 수일 내로 답변을 업데이트하겠습니다.\n 죄송합니다 :("
-        #     imageUrl = "없음"
-        #     # 사용자 질문, 예측 의도, 선택된 질문, 선택된 질문 의도, 유사도 점수
-        #     Logger.error(f"{query},{intent_name},{selected_qes},{query_intent},{score}")
-
-        # send_json_data_str = {
-        #     "Query": selected_qes,
-        #     "Answer": answer,
-        #     "imageUrl": imageUrl,
-        #     "Intent": intent_name
-        # }
-
+        
         send_json_data_str = {
             "Query": query,
             "Answer": query,
