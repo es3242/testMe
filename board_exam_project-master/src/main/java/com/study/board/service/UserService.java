@@ -40,13 +40,9 @@ public class UserService {
         return false;
     }
 
+
     public User getUserContents(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
-    }
-
-    public User getUserContents(String nickname) {
-        Optional<User> user = userRepository.findByNickname(nickname);
         return user.orElse(null);
     }
 

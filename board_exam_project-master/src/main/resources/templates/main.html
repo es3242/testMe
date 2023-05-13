@@ -79,7 +79,7 @@
     <a th:if="${#session != null and #session.getAttribute('user') != null}" href="/pdf" class="button">pdf리스트</a>
     <a th:if="${#session == null or #session.getAttribute('user') == null}" href="/register" class="button">회원가입</a>
     <a th:if="${#session == null or #session.getAttribute('user') == null}" href="/login" class="button">login</a>
-    <a th:if="${#session != null and #session.getAttribute('user') != null}" href="/mypage/{nickname}(nickname=${user.nickname})" class="button">마이페이지</a>
+    <a th:if="${#session != null and #session.getAttribute('user') != null}" href="/mypage" class="button">마이페이지</a>
     <a th:if="${#session != null and #session.getAttribute('user') != null}" href="/logout" class="button">logout</a>
 
 </div>
