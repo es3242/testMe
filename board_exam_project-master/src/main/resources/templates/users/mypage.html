@@ -73,5 +73,35 @@
         </tr>
         </tbody>
     </table>
+
+    <h1>사용자가 그동안 작성한 자유게시판 게시글 목록</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>user</th>
+            <th>contentId</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="freeboard : ${userFreeboard}"> <!--컨트롤러에서 받은 Freeboard 타입의 리스트(현재 접속한 user id로 작성된 글들)를 받아서 데이터를 표형식으로 출력한다.-->
+            <td th:text="${freeboard.user.id}"></td>
+            <td th:text="${freeboard.contentId}"></td>
+            <td th:text="${freeboard.title}"></td>
+            <td th:text="${freeboard.content}"></td>
+            <td th:text="${freeboard.contentAt}"></td>
+            <td th:text="${freeboard.updatedAt}"></td>
+            <td>
+                <a th:href="@{/edit/{id}(id=${freeboard.contentId})}">Edit</a>
+                <a th:href="@{/delete/{id}(id=${freeboard.contentId})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
 </body>
 </html>
