@@ -40,8 +40,7 @@ public class UserService {
         return false;
     }
 
-
-    public User getUserContents(Long id) {
+    public User getUserInfo(Long id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
     }
