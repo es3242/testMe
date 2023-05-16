@@ -4,23 +4,32 @@ package com.study.board.controller;
 import com.study.board.entity.Freeboard;
 import com.study.board.service.FreeboardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+//@Controller
 //@RequestMapping("/freeboard")
+@RestController
 public class FreeboardController {
 
     @Autowired
     private FreeboardService freeboardService;
 
-    @GetMapping("/list")
+  /*  @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("freeboards", freeboardService.getAllFreeboards());
         return "freeboard/list";
-    }
+    }*/
+  @GetMapping(value = "/list")
+  public List<Freeboard> list() {
 
+      return freeboardService.getAllFreeboards();
+  }
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("freeboard", new Freeboard());

@@ -10,6 +10,6 @@ public class RestController {
 
     @GetMapping("/data")
     public String getData() {
-        return "Hello from Spring!";
+        return "Hello from ㅁㄴㅇㅁㅇㅁㅇㅁㄴㅇ!";
     }
 }

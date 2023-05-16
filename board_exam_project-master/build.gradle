@@ -37,7 +37,6 @@ dependencies {
 	implementation 'org.springframework:spring-web:5.3.9'
 
 // 자바-파이써 인데 안쓸듯
-	implementation group: 'org.python', name: 'jython-slim', version: '2.7.3'
 
 
 // pdf text 추출
@@ -45,8 +44,12 @@ dependencies {
 
 // 명사 추출하는데 사용
 
+	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+	implementation 'org.json:json:20210307'
+	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
-	implementation 'com.github.shin285:KOMORAN:3.3.9'
+	//
+
 }
 
 test {
