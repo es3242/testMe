@@ -5,7 +5,7 @@ function RankingTable() {
   // useEffect 훅을 사용하여 컴포넌트가 마운트될 때, 우수학습자 랭킹 데이터를 가져오도록 로직을 작성합니다.
 
   return (
-    <table>
+    <table className="table">
       <thead>
         <tr>
           <th>순위</th>

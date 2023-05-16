@@ -20,6 +20,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import RankingTable from "./pages/RankingTable";
 import Upload from "./pages/Upload";
+import Board from "./pages/Board";
 
 function App() {
   const [hello, setHello] = useState("");
@@ -262,6 +263,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/ranking" element={<RankingTable />}></Route>
         <Route path="/upload" element={<Upload />}></Route>
+        <Route path="/board" element={<Board />}></Route>
 
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>멤버임</div>} />
