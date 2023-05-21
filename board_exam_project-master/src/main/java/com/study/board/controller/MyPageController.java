@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MyPageController {
@@ -26,19 +28,26 @@ public class MyPageController {
     @GetMapping("/mypage")
     @ResponseBody
     public ResponseEntity<?> mypage(HttpSession session) {
-        Object obj = session.getAttribute("user"); // 사용자 정보 받아서 오브젝트로 만들기
+        Object obj = session.getAttribute("user");
+        System.out.println(obj);
         if (obj == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자가 로그인되어 있지 않습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in.");
         } else {
-            // 사용자 id를 Long 타입으로 변환
             Long userId = Long.parseLong(obj.toString());
-            // 사용자 정보 불러오기
+            System.out.println(userId);
+
             User user = userService.getUserInfo(userId);
+            System.out.println(user);
 
-            // freeboard에서 사용자가 작성한 글 불러오기
             List<Freeboard> userFreeboards = freeboardService.getContentByUserId(userId);
+            System.out.println(userFreeboards);
 
-            return ResponseEntity.ok().body(userFreeboards);
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", user);
+            response.put("userFreeboards", userFreeboards);
+
+            return ResponseEntity.ok().body(response);
         }
     }
 }
+
