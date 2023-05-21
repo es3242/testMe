@@ -13,7 +13,7 @@ public class Pdf {
     private int pdfId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "created_at")
