@@ -1,5 +1,6 @@
 package com.study.board.service;
 
+import com.study.board.entity.Freeboard;
 import com.study.board.entity.User;
 import com.study.board.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,6 @@ public class UserService {
         // Save the user to the database
         userRepository.save(user);
     }
-
-
-
-
     public boolean authenticate(Long id, String password) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -42,6 +39,13 @@ public class UserService {
         }
         return false;
     }
+
+    public User getUserInfo(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElse(null);
+    }
+
+
 
 
 
