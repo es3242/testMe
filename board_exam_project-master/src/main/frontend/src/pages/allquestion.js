@@ -9,8 +9,10 @@ import {
   Input,
   Button,
 } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function AllQuestion() {
+  const navigate = useNavigate();
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData({
@@ -35,10 +37,16 @@ function AllQuestion() {
 
   useEffect(() => {
     setFormData({
-      title: "여기에 문제 제목 입력",
-      content: "여기에 문제 내용 입력",
+      title:
+        '논리 게이트 크기를 줄이고, 더 많은 게이트를 더욱 조밀하게 넣고 ""',
+      content: "클럭 속도를 높인다",
     });
   }, []);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    navigate("/makecomplete");
+  }
 
   // 사용법
   // <div className="mt-3 rounded border border-success p-3">
@@ -49,23 +57,12 @@ function AllQuestion() {
       <div className="mt-3 rounded border border-success p-3">
         <Form onSubmit={handleSubmit}>
           <FormGroup controlId="title" className="mx-3 mb-3">
-            <Form.Label for="title">문제 제목</Form.Label>
-            <Form.Control
-              type="text"
-              id="title"
-              value={formData.title}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="content" className="mb-3 mx-3">
-            <Form.Label for="content">문제 내용</Form.Label>
+            <Form.Label for="title">문제</Form.Label>
             <Form.Control
               type="text"
               as="textarea"
               id="title"
-              value={formData.content}
-              rows="10"
-              cols="30"
+              placeholder={formData.title}
               onChange={handleChange}
             />
           </FormGroup>
@@ -74,11 +71,16 @@ function AllQuestion() {
             <Form.Control
               type="text"
               id="title"
-              value={formData.title}
+              placeholder={formData.content}
               onChange={handleChange}
             />
           </FormGroup>
-          <Button variant="primary" type="submit" className="mx-3">
+          <Button
+            variant="primary"
+            type="submit"
+            className="mx-6"
+            onClick={handleSubmit}
+          >
             확인
           </Button>
         </Form>

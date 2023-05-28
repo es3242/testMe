@@ -8,7 +8,7 @@ function Upload() {
 
   return (
     <div>
-      <Preview />
+      {/* <Preview /> */}
       <DragDrop />
     </div>
   );

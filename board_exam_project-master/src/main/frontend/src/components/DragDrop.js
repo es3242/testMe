@@ -1,6 +1,10 @@
 // https://velog.io/@yiyb0603/React%EC%97%90%EC%84%9C-%EB%93%9C%EB%9E%98%EA%B7%B8-%EC%95%A4-%EB%93%9C%EB%A1%AD%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-%ED%95%98%EA%B8%B0
 // https://dev.to/hexcube/how-to-add-sass-support-to-a-vite-react-app-37p
 
+import axios from "axios";
+import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
+
 // DragDrop.tsx
 import React, {
   useState,
@@ -15,6 +19,9 @@ const DragDrop = () => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [userId, setUserId] = useState(0);
+  const navigate = useNavigate();
 
   // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
   const dragRef = useRef(null);
@@ -49,6 +56,10 @@ const DragDrop = () => {
     [files]
   ); // 위에서 선언했던 files state 배열을 deps에 넣어줍니다.
 
+  const handleUserIdChange = (event) => {
+    setUserId(Number(event.target.value));
+  };
+
   const handleFilterFile = useCallback(
     (id) => {
       // 매개변수로 받은 id와 일치하지 않는지에 따라서 filter 해줍니다.
@@ -56,6 +67,33 @@ const DragDrop = () => {
     },
     [files]
   );
+
+  const handleUpload = async () => {
+    if (files.length === 0) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("pdfFile", files[0].object);
+    formData.append("user.id", userId);
+
+    try {
+      const response = await axios.post("/pdfup1", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // multipart/form-data로 설정
+        },
+      });
+
+      console.log("업로드 완료:", response.data);
+      // 여기다가 리덕스 써서 파일명 보내야 함!
+      navigate("/make");
+    } catch (error) {
+      console.error("업로드 실패:", error);
+      // 위쪽이 되는대로 아래쪽 navigate를 주석처리
+      navigate("/make");
+    }
+  };
 
   const handleDragIn = useCallback((e) => {
     e.preventDefault();
@@ -157,6 +195,15 @@ const DragDrop = () => {
             );
           })}
       </div>
+      <input type="number" value={userId} onChange={handleUserIdChange} />
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={handleUpload}
+        className="mt-3"
+      >
+        업로드
+      </Button>
     </div>
   );
 };
