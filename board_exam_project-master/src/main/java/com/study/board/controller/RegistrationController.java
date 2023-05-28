@@ -16,19 +16,28 @@ public class RegistrationController {
     private UserService userService;
     @GetMapping("/")
     public String main() {
-        return "main";
+        return "index02";
+    }
+    @GetMapping("/aa")
+    public String mainaaa() {
+        return "meetings02";
+    }
+    @GetMapping("/bb")
+    public String mainabb() {
+        return "meeting-details02";
     }
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-        return "register/register";
+        return "kregister";
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") User user, Model model) {
+
         userService.register(user);
-        model.addAttribute("message", "회원가입 환영합니다!");
-        return "main";
+
+        return "index02";
     }
 
 

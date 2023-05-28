@@ -44,7 +44,7 @@ public class MyPageController {
 
             model.addAttribute("user", user);
             model.addAttribute("userFreeboard", userFreeboards);
-            return "users/mypage";
+            return "kmypage";
                     //ResponseEntity.ok().body(response);
         }
     }

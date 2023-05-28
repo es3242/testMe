@@ -24,7 +24,7 @@ public class FreeboardController {
     @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("freeboards", freeboardService.getAllFreeboards());
-        return "freeboard/list";
+        return "klist";
     }
 
  /*
@@ -46,7 +46,7 @@ public class FreeboardController {
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("freeboard", new Freeboard());
-        return "freeboard/form";
+        return "kform";
     }
 
 
@@ -59,9 +59,8 @@ public class FreeboardController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
-
         model.addAttribute("freeboard", freeboardService.getFreeboardById(id));
-        return "freeboard/form";
+        return "kform";
     }
 
 
@@ -78,4 +77,5 @@ public class FreeboardController {
         freeboardService.deleteFreeboard(id);
         return "redirect:/list";
     }
+
 }

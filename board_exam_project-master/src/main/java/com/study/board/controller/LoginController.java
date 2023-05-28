@@ -18,7 +18,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "login";
+        return "klogin02";
     }
 
     @PostMapping("/login")
@@ -36,7 +36,7 @@ public class LoginController {
             return "redirect:/";
         } else {
             model.addAttribute("error", "실패!");
-            return "login";
+            return "Klogin02";
         }
     }
 
