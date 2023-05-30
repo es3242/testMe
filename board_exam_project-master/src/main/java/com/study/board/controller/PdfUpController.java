@@ -36,14 +36,14 @@ public class PdfUpController {
 
     @GetMapping("/pdfup")
     public String pdfloding() {
-        return "pdf/pdfup";
+        return "kpdfuplode";
     }
 
     @PostMapping("/pdfup1")
     public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, @RequestParam("user.id") int userId, RedirectAttributes redirectAttributes) {
         if (pdfFile.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a PDF file to upload");
-            return "redirect:/pdfup";
+            return "redirect:/";
         }
 
         try {
@@ -87,7 +87,7 @@ public class PdfUpController {
             e.printStackTrace();
         }
 
-        return "main";
+        return "redirect:/";
     }
 
 
@@ -109,7 +109,7 @@ public class PdfUpController {
         Long userId = (Long) session.getAttribute("user");
         List<Pdf> pdfList = pdfService.getPdfListByUserId(userId);
         model.addAttribute("pdfList", pdfList);
-        return "pdf/pdflist";
+        return "kpdflist";
     }
 
 

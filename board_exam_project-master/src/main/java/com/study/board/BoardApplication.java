@@ -11,6 +11,7 @@ import java.util.List;
 public class BoardApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(BoardApplication.class, args);
 	}
 }

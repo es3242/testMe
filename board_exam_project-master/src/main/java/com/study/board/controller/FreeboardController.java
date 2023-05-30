@@ -13,18 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-//@Controller
+
 //@RequestMapping("/freeboard")
-@RestController
+/*@RestController*/
+@Controller
 public class FreeboardController {
 
     @Autowired
     private FreeboardService freeboardService;
-
-  /*  @GetMapping("/list")
+    @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("freeboards", freeboardService.getAllFreeboards());
-        return "freeboard/list";
+        return "klist";
+    }
+
+ /*
+
     @GetMapping(value = "/list")
     public List<Freeboard> list() {
       return freeboardService.getAllFreeboards();
@@ -36,8 +40,10 @@ public class FreeboardController {
       List<Freeboard> freeboards = freeboardService.getAllFreeboards();
       return ResponseEntity.ok().body(freeboards);
     }
+ }*/
 
-    /*@GetMapping("/add")
+
+    @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("freeboard", new Freeboard());
         return "freeboard/form";
@@ -46,13 +52,13 @@ public class FreeboardController {
     public ResponseEntity<String> add() {
         return ResponseEntity.ok("Freeboard form is available.");
     } //따라서 json을 반환하여 정상적으로 자유게시판에 들어갔음을 알 수 있게 함
+*/
 
 
     @GetMapping("/edit/{id}") // JSON 아님
     public String edit(@PathVariable("id") Integer id, Model model) {
-
         model.addAttribute("freeboard", freeboardService.getFreeboardById(id));
-        return "freeboard/form";
+        return "kform";
     }
 
 
@@ -69,4 +75,5 @@ public class FreeboardController {
         freeboardService.deleteFreeboard(id);
         return "redirect:/list";
     }
+
 }

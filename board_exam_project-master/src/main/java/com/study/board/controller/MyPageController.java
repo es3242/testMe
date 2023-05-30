@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 public class MyPageController {
     @Autowired
     private UserService userService;
@@ -26,12 +27,11 @@ public class MyPageController {
     private FreeboardService freeboardService;
 
     @GetMapping("/mypage")
-    @ResponseBody
-    public ResponseEntity<?> mypage(HttpSession session) {
+    public String mypage(HttpSession session, Model model) {
         Object obj = session.getAttribute("user");
         System.out.println(obj);
         if (obj == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not logged in.");
+            return "user/mypage";
         } else {
             Long userId = Long.parseLong(obj.toString());
             System.out.println(userId);
@@ -42,11 +42,10 @@ public class MyPageController {
             List<Freeboard> userFreeboards = freeboardService.getContentByUserId(userId);
             System.out.println(userFreeboards);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("user", user);
-            response.put("userFreeboards", userFreeboards);
-
-            return ResponseEntity.ok().body(response);
+            model.addAttribute("user", user);
+            model.addAttribute("userFreeboard", userFreeboards);
+            return "kmypage";
+                    //ResponseEntity.ok().body(response);
         }
     }
 }
