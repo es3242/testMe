@@ -16,8 +16,6 @@ public class dodoService {
 
 
     public void write(dodo dodo) throws Exception {
-
-
         dodoRepository.save(dodo);
     }
 

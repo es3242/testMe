@@ -18,7 +18,6 @@ import java.util.List;
 /*@RestController*/
 @Controller
 public class FreeboardController {
-
     @Autowired
     private FreeboardService freeboardService;
     @GetMapping("/list")
@@ -27,8 +26,8 @@ public class FreeboardController {
         return "klist";
     }
 
- /*
 
+    /*
     @GetMapping(value = "/list")
     public List<Freeboard> list() {
       return freeboardService.getAllFreeboards();
@@ -40,19 +39,20 @@ public class FreeboardController {
       List<Freeboard> freeboards = freeboardService.getAllFreeboards();
       return ResponseEntity.ok().body(freeboards);
     }
- }*/
 
 
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("freeboard", new Freeboard());
         return "freeboard/form";
-    }*/ //restController을 사용함으로써 html 반환이 불가능해짐.
-    @GetMapping("/add") // JSON
+    } //restController을 사용함으로써 html 반환이 불가능해짐.
+
+
+    @GetMapping("/addJSON") // JSON
     public ResponseEntity<String> add() {
         return ResponseEntity.ok("Freeboard form is available.");
     } //따라서 json을 반환하여 정상적으로 자유게시판에 들어갔음을 알 수 있게 함
-*/
+
 
 
     @GetMapping("/edit/{id}") // JSON 아님
