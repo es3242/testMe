@@ -1,4 +1,4 @@
-package com.eastflag.fullstack.domain;
+package com.study.board.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

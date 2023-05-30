@@ -1,4 +1,4 @@
-package com.eastflag.fullstack.domain;
+package com.study.board.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

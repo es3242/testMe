@@ -30,7 +30,8 @@ public class FreeboardController {
       return freeboardService.getAllFreeboards();
     }
     }*/
-    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE) // JSON
     public ResponseEntity<List<Freeboard>> list() {
       List<Freeboard> freeboards = freeboardService.getAllFreeboards();
       return ResponseEntity.ok().body(freeboards);
@@ -41,13 +42,13 @@ public class FreeboardController {
         model.addAttribute("freeboard", new Freeboard());
         return "freeboard/form";
     }*/ //restController을 사용함으로써 html 반환이 불가능해짐.
-    @GetMapping("/add")
+    @GetMapping("/add") // JSON
     public ResponseEntity<String> add() {
         return ResponseEntity.ok("Freeboard form is available.");
     } //따라서 json을 반환하여 정상적으로 자유게시판에 들어갔음을 알 수 있게 함
 
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id}") // JSON 아님
     public String edit(@PathVariable("id") Integer id, Model model) {
 
         model.addAttribute("freeboard", freeboardService.getFreeboardById(id));
@@ -55,7 +56,7 @@ public class FreeboardController {
     }
 
 
-    @PostMapping("/save")
+    @PostMapping("/save") // JSON 아님
     public String save(@ModelAttribute("freeboard") Freeboard freeboard) {
         //freeboardService.updateFreeboard(freeboard.getContentId(), freeboard);
         freeboardService.createFreeboard(freeboard);
@@ -63,7 +64,7 @@ public class FreeboardController {
     }
 
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id}") // JSON 아님
     public String delete(@PathVariable("id") Integer id) {
         freeboardService.deleteFreeboard(id);
         return "redirect:/list";

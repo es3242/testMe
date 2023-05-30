@@ -1,6 +1,6 @@
-package com.eastflag.fullstack.persistence;
+package com.study.board.persistence;
 
-import com.eastflag.fullstack.domain.CommentVO;
+import com.study.board.domain.CommentVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

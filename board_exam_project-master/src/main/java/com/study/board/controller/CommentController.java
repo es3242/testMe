@@ -1,9 +1,10 @@
-package com.eastflag.fullstack.controller;
+package com.study.board.controller;
 
-import com.eastflag.fullstack.domain.CommentVO;
-import com.eastflag.fullstack.domain.ResultVO;
-import com.eastflag.fullstack.persistence.CommentMapper;
+import com.study.board.domain.CommentVO;
+import com.study.board.domain.ResultVO;
+import com.study.board.persistence.CommentMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

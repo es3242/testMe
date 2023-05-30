@@ -1,10 +1,11 @@
-package com.eastflag.fullstack.controller;
+package com.study.board.controller;
 
-import com.eastflag.fullstack.domain.BoardVO;
-import com.eastflag.fullstack.domain.ResultVO;
-import com.eastflag.fullstack.persistence.BoardMapper;
+import com.study.board.domain.BoardVO;
+import com.study.board.domain.ResultVO;
+import com.study.board.persistence.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
