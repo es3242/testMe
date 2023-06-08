@@ -2,6 +2,8 @@ package com.study.board.controller;
 
 import com.study.board.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +24,9 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String processLoginForm(@RequestParam("id") Long id,
+    public ResponseEntity<String> login(@RequestParam("id") Long id,
                                    @RequestParam("password") String password,
-                                   HttpSession session, Model model) {
+                                   HttpSession session) {
 
         System.out.println(id);
         System.out.println(password);
@@ -33,19 +35,33 @@ public class LoginController {
         System.out.println(isAuthenticated);
         if (isAuthenticated) {
             session.setAttribute("user", id);
-            return "redirect:/";
+            return new ResponseEntity<>("Logged in", HttpStatus.OK);
+            // return "redirect:/";
         } else {
-            model.addAttribute("error", "실패!");
-            return "Klogin02";
+            return new ResponseEntity<>("fail", HttpStatus.OK);
         }
     }
 
+    @GetMapping("/session-info")
+    public ResponseEntity<String> sessionInfo(HttpSession session) {
+        Long userId = (Long) session.getAttribute("user");
+        if (userId == null) {
+            return new ResponseEntity<>("null", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(userId.toString(), HttpStatus.OK);
+        }
+
+    }
 
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/";
+        System.out.println("Logged out");
+        return new ResponseEntity<>("Logged out", HttpStatus.OK);
     }
+
+
 }
 
