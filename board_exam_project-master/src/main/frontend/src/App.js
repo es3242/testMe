@@ -28,12 +28,34 @@ import MakeComplete from "./pages/makecomplete";
 import BoardRegister from "./pages/BoardRegister";
 import BoardView from "./pages/BoardView";
 import BoardEdit from "./pages/BoardEdit";
+import { useRecoilState } from "recoil";
+import loginState from "./Atoms";
 
 function App() {
   const [hello, setHello] = useState("");
   const [msg, setMsg] = useState([]);
   const [message, setMessage] = useState([]);
+  const [loggedIn, setLoggedIn] = useRecoilState(loginState);
   let navigate = useNavigate();
+
+  const logout = async () => {
+    const res = await axios
+      .get("/logout")
+      .then(function (response) {
+        console.log(response.data);
+        sessionStorage.removeItem("loggedIn");
+        setLoggedIn("False");
+        alert("성공적으로 로그아웃했습니다!");
+        // 홈으로 넘겨주기
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(
+          "Error during getting session info:",
+          error.response.data
+        );
+      });
+  };
 
   /*
   useEffect(() => {
@@ -101,23 +123,47 @@ function App() {
               {/* <Link to="/detail">상세페이지</Link> */}
               커뮤니티
             </Nav.Link>
-
-            <Nav.Link
-              onClick={() => {
-                navigate("/register");
-              }}
-            >
-              {/* <Link to="/detail">상세페이지</Link> */}
-              회원가입
-            </Nav.Link>
-            <Nav.Link
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              {/* <Link to="/detail">상세페이지</Link> */}
-              로그인
-            </Nav.Link>
+          </Nav>
+          <Nav className="ms-auto">
+            {loggedIn === "False" ? (
+              <>
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  {/* <Link to="/detail">상세페이지</Link> */}
+                  로그인
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/register");
+                  }}
+                >
+                  {/* <Link to="/detail">상세페이지</Link> */}
+                  회원가입
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link
+                  onClick={() => {
+                    navigate("/mypage");
+                  }}
+                >
+                  {/* <Link to="/detail">상세페이지</Link> */}
+                  마이페이지
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  {/* <Link to="/detail">상세페이지</Link> */}
+                  로그아웃
+                </Nav.Link>
+              </>
+            )}
           </Nav>
         </Container>
       </Navbar>

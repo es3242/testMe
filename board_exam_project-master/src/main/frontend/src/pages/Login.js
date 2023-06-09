@@ -2,10 +2,15 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import loginState from "../Atoms";
 
 function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useRecoilState(loginState);
+  const navigate = useNavigate();
 
   const login = async (id, password) => {
     const res = await axios
@@ -18,7 +23,9 @@ function Login() {
       .then(function (response) {
         console.log(response);
         sessionStorage.setItem("loggedIn", id);
-        // 어딘가로 넘겨주기
+        setLoggedIn("True");
+        // 홈으로 넘기기
+        navigate("/");
       })
       .catch((error) => {
         console.error(error.response.data);
@@ -30,7 +37,6 @@ function Login() {
       .get("/session-info")
       .then(function (response) {
         console.log("지금 로그인한 사용자: ", response.data);
-        // 어딘가로 넘겨주기
       })
       .catch((error) => {
         console.error(
@@ -45,6 +51,8 @@ function Login() {
       .get("/logout")
       .then(function (response) {
         console.log(response.data);
+        sessionStorage.removeItem("loggedIn");
+        setLoggedIn("False");
         // 어딘가로 넘겨주기
       })
       .catch((error) => {
@@ -55,26 +63,15 @@ function Login() {
       });
   };
 
-  // const logout = async () => {
-  //   try {
-  //     const response = await axios.get("/logout");
-  //     // console.log(response.data);
-  //     sessionStorage.removeItem("loggedIn");
-  //     // 어딘가로 넘겨주기
-  //   } catch (error) {
-  //     if (error.response && error.response.data) {
-  //       console.error("Error during logout:", error.response.data);
-  //     } else {
-  //       console.error("Error during logout:", error);
-  //     }
-  //   }
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(id);
     console.log(password);
-    login(id, password);
+    if (loggedIn === "True") {
+      alert("이미 로그인되어 있습니다!");
+    } else {
+      login(id, password);
+    }
   };
 
   return (
@@ -110,21 +107,21 @@ function Login() {
           </Button>
         </Form>
 
-        <button
+        {/* <button
           onClick={() => {
             getSessionInfo();
           }}
         >
           세션 정보 받아오기
-        </button>
+        </button> */}
 
-        <button
+        {/* <button
           onClick={() => {
             logout();
           }}
         >
           로그아웃
-        </button>
+        </button> */}
       </div>
     </div>
   );
