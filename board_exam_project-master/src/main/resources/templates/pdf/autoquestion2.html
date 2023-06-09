@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="TemplateMo">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <title>Education Meeting HTML5 Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/templatemo-edu-meeting.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/lightbox.css">
+    <!--
+
+    TemplateMo 569 Edu Meeting
+
+    https://templatemo.com/tm-569-edu-meeting
+
+    -->
+
+</head>
+<style>
+  html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.contact-us {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.section-divider {
+    border-top: 1px solid gray;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+</style>
+<body>
+
+<!-- Sub Header -->
+<div class="sub-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-sm-8">
+                <div class="left-content">
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                <div class="right-icons">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/" class="logo">
+                        TEST ME
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/list">자유 게시판 list</a></li>
+                        <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/pdf">pdf리스트</a></li>
+                        <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/pdf" onclick="alert('로그인이 필요합니다.'); return false;">pdf리스트</a></li>
+                        <li class="has-sub" th:if="${#session != null && #session.getAttribute('user') != null}">
+                            <a href="javascript:void(0)">PDF</a>
+                            <ul class="sub-menu">
+                                <li><a href="/pdfup">PDF업로드</a></li>
+                                <li><a href="/pdftext">PDFtext</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-sub" th:if="${#session == null || #session.getAttribute('user') == null}">
+                            <a href="javascript:void(0)">PDF</a>
+                            <ul class="sub-menu">
+                                <li><a href="/pdfup" onclick="alert('로그인이 필요합니다.'); return false;">PDF업로드</a></li>
+                                <li><a href="/pdftext" onclick="alert('로그인이 필요합니다.'); return false;">PDFtext</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/mypage">마이페이지</a></li>
+                        <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/register">회원가입</a></li>
+                        <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/logout" class="active">logout</a></li>
+                        <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/login" class="active">login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<!-- ***** Main Banner Area Start ***** -->
+<section class="contact-us">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 align-self-center">
+                <div class="section-heading text-center">
+                    <h2>문제 출제 완료</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" style="overflow-y: scroll; max-height: 400px;">
+                        <form id="contact" action="/login" method="post">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h4>Test 0</h4>
+                                    <div> </div>
+                                    <div>Questions:컴퓨터 산술(9,10장)</div>
+                                        <p>성결대학교 컴퓨터공학부
+                                        최정열 교수
+                                        (passjay@sungkyul.ac.kr)
+                                        게으른 자여 네가 어느 때까지 누워 있겠느냐
+                                        네가 어느 때에 잠이 깨어 일어나겠느냐 ( )
+                                        자자, ( ) 졸자, 손을 모으고 ( ) 누워있자
+                                        하면 네 빈궁이 강도 같이 오며 네 곤핍이
+                                        군사 같이 이르리라(잠언6:9-11)</p>
+
+                                    <div>Answer:좀더</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>Test 1</h4>
+                                    <div>Questions:수업 목표</div>
+                                    <p> 산술논리연산장치의 구성요소와 그 기능을 이해한다
+                                     10진수, 2진수, 16진수들 간의 변환을 할 수 있다
+                                     2의 보수 표현을 ( )할 수 있다
+                                     정수 산술 연산(가감승제)을 할 수 있다
+                                     부동 소수점 표현을 ( )할 수 있다
+                                     부동 소수점 산술 연산이 어떻게 수행되는지 ( )할 수 있다
+                                    2</p>
+
+                                    <div>Answer:설명</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>Test 2</h4>
+                                    <div>Questions:목차</div>
+                                    <p> 산술논리( )장치
+                                         정수 표현
+                                         정수의 산술 ( )
+                                         부동소수점 표현
+                                         부동소수점의 산술 ( )
+                                         논리 ( )
+                                        3</p>
+
+                                    <div>Answer:연산</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>Test 3</h4>
+                                    <div>Questions:1. 산술논리연산( )(The Arithmetic and Logic Unit, ALU)</div>
+                                    <p> 중앙처리( )(CPU)의 구성
+                                         산술논리연산( )
+                                        - (Arithmetic & Logic Unit : ALU)
+                                        - 산술 및 논리 연산을 수행
+                                         레지스터
+                                         제어 ( )
+                                        CPU의 구성 요소
+                                        4</p>
+
+                                    <div>Answer:장치</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>Test 4</h4>
+                                    <div>Questions:ALU 내부 구성 요소</div>
+                                    <p> 산술 연산( )
+                                         +, -, ×, ÷등을 수행
+                                         논리 연산( )
+                                         AND, OR, XOR, NOT 등을 수행
+                                         시프트 레지스터
+                                         shift register
+                                         비트들을 좌우측으로 이동
+                                         보수기(complementer)
+                                         2진 데이터를 2의 보수로 변환
+                                         음수를 만드는 역할
+                                         상태 레지스터(status register)
+                                         연산 결과의 상태를 나타내는
+                                        플래그(flag)들을 저장
+                                        ALU의 구성 ( )
+                                        5
+
+                                    <div>Answer:장치</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>객관식 0번</h4>
+                                    <div>문제: 10진수로 표현하면 (724)10의 분석은 무엇인가요?</div>
+                                    <p>1번: 700+20+4
+
+                                        2번: 7×102+2×101+4×100
+
+                                        3번: 1×25+0×24+1×23+1×22+0×21+1×20
+
+                                        4번: 15×161 + 3×160
+
+                                    <div>정답: 1</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>객관식 1번</h4>
+                                    <div>문제: 수를 표현하기 위해 사용하는 기호는 무엇인가요?</div>
+                                    <p>1번: 0~9
+
+                                        2번: 0~9, A, B, C, D, E, F
+
+                                        3번: 0과 1만
+
+                                        4번: 0~9, A~Z
+
+                                    <div>정답: 2</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>객관식 2번</h4>
+                                    <div>문제: 가수는 무엇 사이의 값을 가지는 24-비트 가수를 저장하는가?</div>
+                                    <p>1번: [0,1)
+
+                                        2번: [-1,1)
+
+                                        3번: [0,2)
+
+                                        4번: [1,2)
+
+                                    <div>정답: 4</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>객관식 3번</h4>
+                                    <div>문제: 부동소수점수의 크기를 비교하기 위해서 취급되는 것은?</div>
+                                    <p>1번: 가수
+
+                                        2번: 기수
+
+                                        3번: 지수
+
+                                        4번: 바이어스
+
+                                    <div>정답: 3</div>
+                                    <div class="section-divider"></div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4>객관식 4번</h4>
+                                    <div>문제: 묵시는 무엇을 의미하는가?</div>
+                                    <p>1번: 명시적인 것
+
+                                        2번: 부정적인 것
+
+                                        3번: 암시적인 것
+
+                                        4번: 강제적인 것
+
+                                    <div>정답: 3</div>
+                                    <div class="section-divider"></div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ***** Main Banner Area End ***** -->
+
+
+
+
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/lightbox.js"></script>
+<script src="assets/js/tabs.js"></script>
+
+<script src="assets/js/video.js"></script>
+<script src="assets/js/slick-slider.js"></script>
+
+<script src="assets/js/custom.js"></script>
+<script>
+        //according to loftblog tut
+        $('.nav li:first').addClass('active');
+
+        var showSection = function showSection(section, isAnimate) {
+          var
+          direction = section.replace(/#/, ''),
+          reqSection = $('.section').filter('[data-section="' + direction + '"]'),
+          reqSectionPos = reqSection.offset().top - 0;
+
+          if (isAnimate) {
+            $('body, html').animate({
+              scrollTop: reqSectionPos },
+            800);
+          } else {
+            $('body, html').scrollTop(reqSectionPos);
+          }
+
+        };
+
+        var checkSection = function checkSection() {
+          $('.section').each(function () {
+            var
+            $this = $(this),
+            topEdge = $this.offset().top - 80,
+            bottomEdge = topEdge + $this.height(),
+            wScroll = $(window).scrollTop();
+            if (topEdge < wScroll && bottomEdge > wScroll) {
+              var
+              currentId = $this.data('section'),
+              reqLink = $('a').filter('[href*=\\#' + currentId + ']');
+              reqLink.closest('li').addClass('active').
+              siblings().removeClass('active');
+            }
+          });
+        };
+
+        $('.main-menu, .responsive-menu, .scroll-to-section').on('click', 'a', function (e) {
+          e.preventDefault();
+          showSection($(this).attr('href'), true);
+        });
+
+        $(window).scroll(function () {
+          checkSection();
+        });
+    </script>
+</body>
+
+</body>
+</html>

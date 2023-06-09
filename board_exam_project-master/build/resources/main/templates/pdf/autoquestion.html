@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Data from URL</title>
+</head>
+<body>
+<button onclick="getData()">Get Data</button>
+<div id="dataContainer"></div>
+
+<script>
+      function getData() {
+      var url = 'http://localhost:5000/dodolist';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          // 데이터 출력을 콘솔로 확인
+          console.log(data);
+          var pages = data.Pages;
+          var textBasedPDF = data.Text_based_PDF;
+          var test = data.Test;
+          var solution = data.Solutions;
+          console.log(test);
+          console.log(solution);
+
+          var output = '';
+          for (var i = 0; i < pages; i++) {
+            output += '-----------------------------------------------<br>';
+            output += 'Test ' + i + '<br>';
+            output += 'Questions: ' + test[i] + '<br>';
+            output += 'Answer: ' + solution[i] + '<br>';
+          }
+
+          document.getElementById('dataContainer').innerHTML = output;
+
+        }
+      };
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
