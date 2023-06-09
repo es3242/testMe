@@ -119,28 +119,4 @@ public class PdftextController {
         return "main";
     }
 
-
-
-
-
-
-    @GetMapping("/saveinfo")
-    public String getQuestionInfo(Model model) {
-        model.addAttribute("page", 1); // 초기 페이지를 1로 설정
-        model.addAttribute("info", ""); // 초기 정보를 빈 문자열로 설정
-        return "pdf/createquestion";
-    }
-
-    @PostMapping("/saveinfo")
-    public String saveInfo(@RequestParam("page") int page, @RequestParam("info") String info) {
-        // 사용자 입력을 처리하고 필요에 따라 정보를 저장합니다
-        System.out.println("페이지: " + page + ", 정보: " + info);
-
-        // 정보를 서버로 전송합니다
-        JSONObject json = new JSONObject();
-        json.put("text", info);
-        json.put("page", page);
-        pdfService.sendInfoToServer(json);
-        return "redirect:/pdftext"; // 메인 페이지로 리디렉션합니다
-    }
 }
