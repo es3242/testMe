@@ -5,9 +5,12 @@ import { Button, Pagination } from "react-bootstrap";
 import axios from "axios";
 import "./Board.scss";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import loginState from "../Atoms";
 
 function Board() {
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useRecoilState(loginState);
   const [boardList, setBoardList] = useState([]);
 
   // const { id } = useParams(); // Accessing the dynamic parameter from the URL
@@ -76,7 +79,13 @@ function Board() {
           variant="success"
           className="float-right mt-3"
           style={{ marginLeft: "auto" }}
-          onClick={() => navigate("/add")}
+          onClick={() => {
+            if (loggedIn === "True") {
+              navigate("/add");
+            } else {
+              alert("로그인이 필요합니다.");
+            }
+          }}
         >
           글쓰기
         </Button>

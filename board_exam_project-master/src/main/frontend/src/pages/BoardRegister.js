@@ -5,52 +5,78 @@ import { useNavigate } from "react-router-dom";
 
 const BoardRegister = (props) => {
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
+  const [user, setUser] = useState(sessionStorage.getItem("loggedIn"));
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [contentAt, setContentAt] = useState(new Date().toLocaleString());
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      setValidated(false);
-      return;
+    console.log(user);
+    console.log(title);
+    console.log(content);
+    console.log(contentAt);
+
+    const postData = { user, title, content, contentAt };
+    try {
+      const response = await axios.post("/save", postData);
+      if (response.status === 200) {
+        window.location.href = "/list";
+      }
+    } catch (error) {
+      console.error("Error while sending data:", error);
     }
 
-    setValidated(true);
-
-    const board = {
-      title: form.titleInput.value,
-      content: form.contentText.value,
-    };
-    addBoard(board);
-    navigate("/add");
-  };
-
-  const addBoard = async (board) => {
-    const res = await axios.post("/api/board", board);
-    console.log(res);
+    // navigate("/board");
   };
 
   return (
     <div className="container">
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <h1 className="d-flex justify-content-center mt-3 mb-3">글 쓰기</h1>
+      <Form
+        method="post"
+        action="/save"
+        object="freeboard"
+        onSubmit={handleSubmit}
+      >
+        <Form.Group controlId="userID">
+          <Form.Label htmlFor="user">현재 로그인한 ID</Form.Label>
+          <Form.Control
+            required
+            readOnly
+            type="text"
+            id="user"
+            name="user"
+            value={user}
+          />
+        </Form.Group>
         <Form.Group controlId="titleInput">
-          <Form.Label>제목</Form.Label>
-          <Form.Control required type="email" placeholder="" />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            이메일을 입력하세요!!
-          </Form.Control.Feedback>
+          <Form.Label htmlFor="title">제목</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            name="title"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder=""
+          />
         </Form.Group>
         <Form.Group controlId="contentText">
-          <Form.Label>내용</Form.Label>
-          <Form.Control required as="textarea" rows={20} />
-          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            내용을 입력하세요!!
-          </Form.Control.Feedback>
+          <Form.Label htmlFor="content">내용</Form.Label>
+          <Form.Control
+            required
+            as="textarea"
+            name="content"
+            rows={20}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            id="content"
+          />
         </Form.Group>
+        <input type="hidden" value={contentAt} name="contentAt"></input>
         <Button variant="primary" type="submit">
           저장
         </Button>

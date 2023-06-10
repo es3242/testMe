@@ -20,7 +20,6 @@ const DragDrop = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [userId, setUserId] = useState(0);
   const navigate = useNavigate();
 
   // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
@@ -56,10 +55,6 @@ const DragDrop = () => {
     [files]
   ); // 위에서 선언했던 files state 배열을 deps에 넣어줍니다.
 
-  const handleUserIdChange = (event) => {
-    setUserId(Number(event.target.value));
-  };
-
   const handleFilterFile = useCallback(
     (id) => {
       // 매개변수로 받은 id와 일치하지 않는지에 따라서 filter 해줍니다.
@@ -76,7 +71,7 @@ const DragDrop = () => {
 
     const formData = new FormData();
     formData.append("pdfFile", files[0].object);
-    formData.append("user.id", userId);
+    formData.append("user.id", sessionStorage.getItem("loggedIn"));
 
     try {
       const response = await axios.post("/pdfup1", formData, {
@@ -86,12 +81,12 @@ const DragDrop = () => {
       });
 
       console.log("업로드 완료:", response.data);
+      // 리코일로 파일명 보내는 위치
       // 여기다가 리덕스 써서 파일명 보내야 함!
       navigate("/make");
     } catch (error) {
       console.error("업로드 실패:", error);
-      // 위쪽이 되는대로 아래쪽 navigate를 주석처리
-      navigate("/make");
+      alert("업로드에 실패했습니다!");
     }
   };
 
@@ -195,7 +190,6 @@ const DragDrop = () => {
             );
           })}
       </div>
-      <input type="number" value={userId} onChange={handleUserIdChange} />
       <Button
         variant="primary"
         type="submit"

@@ -109,7 +109,11 @@ function App() {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate("/upload");
+                if (loggedIn === "True") {
+                  navigate("/upload");
+                } else {
+                  alert("로그인이 필요합니다!");
+                }
               }}
             >
               {/* <Link to="/detail">상세페이지</Link> */}

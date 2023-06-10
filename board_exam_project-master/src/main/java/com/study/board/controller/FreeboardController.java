@@ -65,7 +65,9 @@ public class FreeboardController {
     @PostMapping("/save") // JSON 아님
     public String save(@ModelAttribute("freeboard") Freeboard freeboard) {
         //freeboardService.updateFreeboard(freeboard.getContentId(), freeboard);
+        System.out.println("글 써짐");
         freeboardService.createFreeboard(freeboard);
+
         return "redirect:/list";
     }
 
