@@ -1,6 +1,7 @@
 package com.study.board.entity;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 
 @Entity
@@ -9,8 +10,8 @@ public class Pdf {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PDF_id")
-    private int pdfId;
+    @Column(name = "pdf_id")
+    private Integer pdfId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -26,14 +27,11 @@ public class Pdf {
     private String filePath;;
 
 
-
-
-
-    public int getPdfId() {
+    public Integer getPdfId() {
         return pdfId;
     }
 
-    public void setPdfId(int pdfId) {
+    public void setPdfId(Integer pdfId) {
         this.pdfId = pdfId;
     }
 
