@@ -72,6 +72,8 @@ const DragDrop = () => {
     const formData = new FormData();
     formData.append("pdfFile", files[0].object);
     formData.append("user.id", sessionStorage.getItem("loggedIn"));
+    console.log(files[0]);
+    const fileName = files[0].object.name;
 
     try {
       const response = await axios.post("/pdfup1", formData, {
@@ -81,9 +83,7 @@ const DragDrop = () => {
       });
 
       console.log("업로드 완료:", response.data);
-      // 리코일로 파일명 보내는 위치
-      // 여기다가 리덕스 써서 파일명 보내야 함!
-      navigate("/make");
+      navigate(`/make/`, { state: { fileName } });
     } catch (error) {
       console.error("업로드 실패:", error);
       alert("업로드에 실패했습니다!");

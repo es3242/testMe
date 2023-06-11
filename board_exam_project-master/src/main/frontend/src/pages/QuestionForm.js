@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import logo from "../logo.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import pdfIcon from "../public/img1.png";
 
 const QuestionForm = () => {
   // const logo = [icon]; // Add your desired icons here
   // const randomIcon = icons[Math.floor(Math.random() * icons.length)];
   const navigate = useNavigate();
+  const location = useLocation();
+  let fileName = location.state.fileName;
+
+  console.log(location.state);
 
   // 라디오 버튼 선택값을 저장할 state 추가
   const [questionnaireType, setQuestionnaireType] = useState("");
@@ -41,7 +45,7 @@ const QuestionForm = () => {
         <div className="col-3 d-flex flex-column justify-content-center">
           {/* Large title */}
           {/* 더미데이터임. 나중에 Redux에 담을 State로 반영 필요 */}
-          <h3>CA1_컴퓨터구조 개요p.pdf</h3>
+          <h3>{fileName}</h3>
           {/* Small title */}
           {/* <h4>PDF 정보</h4> */}
         </div>
