@@ -81,7 +81,6 @@ public class TextQuestionController {
             question.setQuestionText(questionTexts.get(i));
             question.setOptions(optionsList.get(i));
             question.setAnswer(answers.get(i));
-            question.setQuestionSet(""); // 이 부분은 필요 없으므로 비워둡니다
 
             questionRepository.save(question);
         }

@@ -27,8 +27,6 @@ public class Question {
     @Column(name = "answer")
     private String answer;
 
-    @Column(name = "question_set", columnDefinition = "TEXT") // Specify column definition as TEXT
-    private String questionSet;
 
     // 생성자, getter, setter 등은 생략
 
@@ -61,10 +59,6 @@ public class Question {
         this.answer = answer;
     }
 
-    public void setQuestionSet(String questionSet) {
-        this.questionSet = questionSet;
-    }
-
     public String getQuestionText() {
         return questionText;
     }
@@ -77,7 +71,4 @@ public class Question {
         return answer;
     }
 
-    public String getQuestionSet() {
-        return questionSet;
-    }
 }
