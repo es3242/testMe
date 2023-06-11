@@ -57,7 +57,7 @@ function Board() {
         </tbody>
       </table>
       <hr />
-      <Pagination className="d-flex justify-content-center">
+      {/* <Pagination className="d-flex justify-content-center">
         <Pagination.First />
         <Pagination.Prev />
         <Pagination.Item>{1}</Pagination.Item>
@@ -73,7 +73,7 @@ function Board() {
         <Pagination.Item>{20}</Pagination.Item>
         <Pagination.Next />
         <Pagination.Last />
-      </Pagination>
+      </Pagination> */}
       <div style={{ display: "flex" }}>
         <Button
           variant="success"

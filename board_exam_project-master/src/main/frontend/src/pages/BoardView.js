@@ -8,7 +8,12 @@ import CommentList from "../components/CommentList";
 const BoardView = ({}) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const board = location.state.board;
+  let board = null;
+  if (location.state.board !== undefined) {
+    board = location.state.board;
+  } else if (location.state.freeboard !== undefined) {
+    board = location.state.freeboard;
+  }
 
   // Modal
   const [show, setShow] = useState(false);
@@ -19,12 +24,11 @@ const BoardView = ({}) => {
     console.log(board);
   }, []);
 
-  const handleDelete = async () => {
-    /*
-    const res = await axios.delete(`/api/board?id=${match.params.id}`);
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    const res = await axios.get(`/delete/${board?.contentId}`);
     setShow(false);
     navigate(-1);
-    */
   };
 
   return (

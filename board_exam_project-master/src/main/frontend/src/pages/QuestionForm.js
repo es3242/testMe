@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../logo.svg";
 import { useNavigate } from "react-router-dom";
 import pdfIcon from "../public/img1.png";
@@ -8,9 +8,21 @@ const QuestionForm = () => {
   // const randomIcon = icons[Math.floor(Math.random() * icons.length)];
   const navigate = useNavigate();
 
+  // 라디오 버튼 선택값을 저장할 state 추가
+  const [questionnaireType, setQuestionnaireType] = useState("");
+
   const handleSubmit = async () => {
-    // 여기에 수동이냐 자동이냐에 따라서 다르게 라우팅
-    navigate("/edit");
+    // 수동이냐 자동이냐에 따라서 다르게 라우팅
+    if (questionnaireType === "manual") {
+      navigate("/manualedit");
+    } else if (questionnaireType === "automated") {
+      navigate("/edit");
+    }
+  };
+
+  // 라디오 버튼 변경 이벤트 처리 함수
+  const handleRadioChange = (e) => {
+    setQuestionnaireType(e.target.value);
   };
 
   return (
@@ -42,6 +54,7 @@ const QuestionForm = () => {
             name="questionnaireType"
             id="manualQuestionnaire"
             value="manual"
+            onChange={handleRadioChange}
           />
           <label className="form-check-label" htmlFor="manualQuestionnaire">
             수동 출제
@@ -55,6 +68,7 @@ const QuestionForm = () => {
             name="questionnaireType"
             id="automatedQuestionnaire"
             value="automated"
+            onChange={handleRadioChange}
           />
           <label className="form-check-label" htmlFor="automatedQuestionnaire">
             자동 출제

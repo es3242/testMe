@@ -30,6 +30,8 @@ import BoardView from "./pages/BoardView";
 import BoardEdit from "./pages/BoardEdit";
 import { useRecoilState } from "recoil";
 import loginState from "./Atoms";
+import MyPage from "./pages/MyPage";
+import EditManualQuestion from "./pages/editmanualquestion";
 
 function App() {
   const [hello, setHello] = useState("");
@@ -227,6 +229,7 @@ function App() {
         <Route path="/make" element={<QuestionForm />}></Route>
         <Route path="/makecomplete" element={<MakeComplete />}></Route>
         <Route path="/edit" element={<EditQuestion />}></Route>
+        <Route path="/manualedit" element={<EditManualQuestion />}></Route>
         <Route path="/allquestion" element={<AllQuestion />}></Route>
         <Route path="/solvequestion" element={<SolveQuestion />}></Route>
         <Route path="/register" element={<Register />}></Route>
@@ -236,6 +239,7 @@ function App() {
         <Route path="/add" element={<BoardRegister />}></Route>
         <Route path="/board-view/" element={<BoardView />}></Route>
         <Route path="/board-edit/" element={<BoardEdit />}></Route>
+        <Route path="/mypage" element={<MyPage />}></Route>
 
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>멤버임</div>} />
