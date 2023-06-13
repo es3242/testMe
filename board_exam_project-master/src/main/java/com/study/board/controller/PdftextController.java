@@ -1,30 +1,25 @@
 package com.study.board.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.board.service.PdfService;
-import org.apache.http.HttpResponse;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
-
-import org.json.JSONObject;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 public class PdftextController {
@@ -32,13 +27,13 @@ public class PdftextController {
     @Autowired
     private PdfService pdfService;
 
-
     @GetMapping("/pdftext")
-    public String pdftext() {
+    public String pdftext(Model model) {
         Random random = new Random();
         PDDocument document = null;
-        String path = "./pdf/test3.pdf"; // PDF file path
-        String outputFilePath = "./pdf/test3.txt"; // output text file path
+        String relativePath = ""; // Absolute path
+        String path = "C:/asdasd/test3.pdf"; // PDF file path
+        String outputFilePath = "C:/asdasd/test3.txt"; // output text file path
 
         try {
             document = PDDocument.load(new File(path)); // load PDF file
@@ -65,11 +60,9 @@ public class PdftextController {
                 JSONObject pageJson = new JSONObject();
                 pageJson.put("text", pageText);
 
-
                 // Add the JSON object to the JSONArray
                 jsonArray.put(pageJson);
             }
-
             writer.close();
 
             try {
@@ -95,6 +88,19 @@ public class PdftextController {
                     String response = reader.readLine();
                     reader.close();
                     System.out.println("Server response: " + response);
+
+                    // Parse the response JSON
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Map<String, Object> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {});
+                    List<String> testList = (List<String>) responseMap.get("Test");
+                    List<String> solutionsList = (List<String>) responseMap.get("Solutions");
+                    int questionsAmount = (int) responseMap.get("Questions Amount");
+
+                    // Add the lists and other data to the model
+                    model.addAttribute("tests", testList);
+                    model.addAttribute("solutions", solutionsList);
+                    model.addAttribute("questionsAmount", questionsAmount);
+
                 } else {
                     // handle error response
                     System.out.println("Error response from server. Response Code: " + responseCode);
@@ -116,7 +122,8 @@ public class PdftextController {
             }
         }
 
-        return "main";
+        return "pdftext";
     }
+
 
 }
