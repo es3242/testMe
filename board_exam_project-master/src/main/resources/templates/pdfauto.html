@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Questions View</title>
+  <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<h1>Questions</h1>
+<table>
+  <tr>
+    <th>Question</th>
+    <th>Option 1</th>
+    <th>Option 2</th>
+    <th>Option 3</th>
+    <th>Option 4</th>
+    <th>Solution</th>
+  </tr>
+  <!-- Iterate over the questions data and generate table rows -->
+  <!-- Assuming questions is available as a model attribute -->
+  <tr th:each="question : ${questions}">
+    <td th:text="${question.question}"></td>
+    <td th:text="${question.d1}"></td>
+    <td th:text="${question.d2}"></td>
+    <td th:text="${question.d3}"></td>
+    <td th:text="${question.d4}"></td>
+    <td th:text="${question.solution}"></td>
+  </tr>
+</table>
+</body>
+</html>
