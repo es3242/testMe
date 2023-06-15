@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 
 //@RequestMapping("/freeboard")
@@ -60,6 +60,12 @@ public class FreeboardController {
         model.addAttribute("freeboard", freeboardService.getFreeboardById(id));
         return "kform";
     }
+
+    @GetMapping(value = "/edit2/{id}", produces = MediaType.APPLICATION_JSON_VALUE) // JSON
+    public ResponseEntity<Optional<Freeboard>> edit(@PathVariable("id") Integer id) {
+        Optional<Freeboard> freeboard = freeboardService.getFreeboardById(id);
+        return ResponseEntity.ok().body(freeboard);
+    } // JSON 형태 전환 예시로 만들어놓긴 했으나 프론트 단에서 따로 구현해놓았기 때문에 사용하지는 않음.
 
 
     @PostMapping("/save") // JSON 아님

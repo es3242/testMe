@@ -1,5 +1,6 @@
 package com.study.board.controller;
 
+import com.study.board.entity.Freeboard;
 import com.study.board.entity.Pdf;
 import com.study.board.entity.Question;
 import com.study.board.entity.User;
@@ -7,6 +8,9 @@ import com.study.board.repository.PdfRepository;
 import com.study.board.repository.QuestionRepository;
 import com.study.board.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class TextQuestionController {
@@ -51,11 +57,42 @@ public class TextQuestionController {
         // 페이지별 텍스트 분리
         String[] pageTexts = content.split("Processed text from page \\d+:");
 
+        System.out.println(pageTexts);
+        System.out.println(numberOfPages);
+
         // 모델에 데이터 추가
         model.addAttribute("pageTexts", pageTexts);
         model.addAttribute("numberOfPages", numberOfPages);
 
         return "pdf/createquestion";
+    }
+
+    @GetMapping(value = "/display2", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> displayText() throws IOException {
+        // txt 파일 경로 설정
+        String txtFilePath = "./pdf/test.txt";
+
+        // txt 파일 읽기
+        Path path = Paths.get(txtFilePath);
+        String content = new String(Files.readAllBytes(path));
+
+        // 페이지 수 계산
+        int numberOfPages = content.split("Processed text from page \\d+:").length;
+
+        // 페이지별 텍스트 분리
+        String[] pageTexts = content.split("Processed text from page \\d+:");
+
+        System.out.println(pageTexts);
+        System.out.println(numberOfPages);
+
+        // 결과 반환을 위한 HashMap 생성
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("pageTexts", pageTexts);
+        responseBody.put("numberOfPages", numberOfPages);
+
+        // ResponseEntity 반환
+        return ResponseEntity.ok(responseBody);
+        // return result;
     }
 
     @PostMapping("/display")
