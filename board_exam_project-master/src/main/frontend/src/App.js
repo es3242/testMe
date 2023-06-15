@@ -32,6 +32,7 @@ import { useRecoilState } from "recoil";
 import loginState from "./Atoms";
 import MyPage from "./pages/MyPage";
 import EditManualQuestion from "./pages/editmanualquestion";
+import sourcevideo from "./img/course-video.mp4";
 
 function App() {
   const [hello, setHello] = useState("");
@@ -178,15 +179,28 @@ function App() {
           path=""
           element={
             <>
-              <div className="hero-section bg-dark text-white d-flex text-center align-items-center py-5 mb-4">
+              <div
+                className="hero-section bg-dark text-white d-flex text-center align-items-center mb-4"
+                style={{ paddingTop: "10rem", paddingBottom: "10rem" }}
+              >
+                <div className="video-background">
+                  <video
+                    playsInline="playsinline"
+                    autoPlay="autoplay"
+                    muted="muted"
+                    loop="loop"
+                  >
+                    <source src={sourcevideo} type="video/mp4" />
+                  </video>
+                </div>
                 <div className="container text-center">
                   <h1 className="display-3 text-white">TestMe</h1>
                   <p className="lead text-white">
                     TestMe로 문제를 쉽게 생성하고 풀어보세요!
                   </p>
-                  {/*<button className="btn btn-primary">아무 일도 일어나지 않는 버튼</button>*/}
                 </div>
               </div>
+
               <div className="container">
                 <h1 className="display-9 text-black text-center mb-5">
                   우수 학습자 랭킹
