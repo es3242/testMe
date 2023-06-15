@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Text Extraction</title>
+    <style>
+        .test {
+            margin-bottom: 20px;
+        }
+
+        .test-header {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .test-content {
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .test-content ul {
+            margin-left: 20px;
+            list-style-type: square;
+        }
+
+        .test-answer {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<h1>PDF Text Extraction</h1>
+<p>Number of pages: <span th:text="${questionsAmount}"></span></p>
+
+<div th:each="test, index : ${tests}" class="test">
+    <hr/>
+    <div class="test-header">
+        Test <span th:text="${index.index + 1}"></span>
+    </div>
+    <div class="test-content">
+        <ul>
+            <li th:each="option : ${test.split('\n')}" th:text="${option}"></li>
+        </ul>
+    </div>
+    <div class="test-answer">
+        <strong>Answer:</strong>
+        <span th:text="${solutions[__${index.index}__]}"></span>
+    </div>
+</div>
+</body>
+</html>
