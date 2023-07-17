@@ -12,4 +12,5 @@ import java.util.List;
 public interface FreeboardRepository extends JpaRepository<Freeboard, Integer> {
 
     List<Freeboard> findAllByUserId(Long userId); //마이페이지에서 유저가 작성한 자유게시판 글들을 찾을 때 사용하는 함수
+
 }

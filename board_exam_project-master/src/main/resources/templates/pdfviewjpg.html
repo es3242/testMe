@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Viewer</title>
+
+  <style>
+    .pdf-container {
+        display: flex;
+    }
+
+    .pdf-view-container {
+        flex: 1; /* Take 50% of the width */
+        display: flex;
+        flex-direction: column;
+        overflow-x: scroll; /* Enable horizontal scrolling */
+    }
+
+    .pdf-view {
+        flex: 1;
+        background-color: #fff;
+    }
+
+    .pdf-canvas {
+        width: auto; /* Allow the canvas to expand horizontally */
+        height: auto; /* Automatically adjust height to maintain aspect ratio */
+    }
+
+    .page-list-container {
+        flex: 1; /* Take 50% of the width */
+        background-color: #f5f5f5;
+        padding: 10px;
+        overflow-y: hidden; /* Hide vertical scrolling */
+        overflow-x: scroll; /* Enable horizontal scrolling */
+    }
+
+    .page-list {
+        white-space: nowrap; /* Keep the page numbers in a single line */
+    }
+
+    .page-number {
+        cursor: pointer;
+        display: inline-block; /* Display page numbers in a line */
+        padding: 10px;
+    }
+
+    .text-container {
+        flex: 1; /* Take 50% of the width */
+        padding: 10px;
+    }
+
+    .text-input {
+        width: 100%;
+        height: 200px;
+        resize: none;
+    }
+  </style>
+
+  <!-- Include PDF.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js"></script>
+</head>
+<body>
+<div class="pdf-container">
+  <div class="pdf-view-container">
+    <div class="pdf-view">
+      <!-- PDF viewer container -->
+      <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+    </div>
+    <div class="page-list-container">
+      <div class="page-list">
+        <!-- Display a list of page numbers here -->
+        <ul id="page-numbers-list">
+          <!-- Page numbers will be dynamically generated here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="text-container">
+    <textarea id="text-input" class="text-input" placeholder="Enter text"></textarea>
+    <button id="save-pdf-button">Save as PDF</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Initialize PDF viewer
+      var pdfContainer = document.querySelector(".pdf-view");
+      var canvas = document.getElementById("pdf-canvas");
+      var context = canvas.getContext("2d");
+      var totalPages = 0;
+      var selectedPages = []; // Array to track selected pages
+
+      // Handle page click event
+      var pageNumbersList = document.getElementById("page-numbers-list");
+
+      // Render PDF page
+      function renderPage(pageNumber) {
+          // Load PDF file using PDF.js library
+          var pdfUrl = "/pdf/test3.pdf";
+          pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+              totalPages = pdf.numPages;
+
+              // Generate the list of page numbers dynamically
+              for (var i = 1; i <= totalPages; i++) {
+                  var li = document.createElement("li");
+                  li.classList.add("page-number");
+                  li.innerText = "Page " + i;
+                  li.addEventListener("click", function() {
+                      var pageNumber = parseInt(this.innerText.substr(5)); // Extract page number from "Page X"
+                      renderPage(pageNumber);
+                  });
+                  pageNumbersList.appendChild(li);
+              }
+
+              // Fetch the specified page
+              return pdf.getPage(pageNumber);
+          }).then(function(page) {
+              // Set the canvas size to match the page size
+              var viewport = page.getViewport({scale: 1});
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+
+              // Render the page on the canvas
+              var renderContext = {
+                  canvasContext: context,
+                  viewport: viewport
+              };
+              page.render(renderContext);
+          });
+      }
+
+      // Handle save PDF button click event
+      var savePdfButton = document.getElementById("save-pdf-button");
+      savePdfButton.addEventListener("click", function() {
+          var selectedPdf = new jsPDF(); // Create a new instance of jsPDF
+
+          // Iterate through the selected pages and add them to the new PDF
+          for (var i = 0; i < selectedPages.length; i++) {
+              var pageNumber = selectedPages[i];
+              // Load the PDF page and add it to the new PDF
+              pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+                  return pdf.getPage(pageNumber);
+              }).then(function(page) {
+                  var viewport = page.getViewport({scale: 1.5});
+                  var canvas = document.createElement("canvas");
+                  var context = canvas.getContext("2d");
+                  canvas.height = viewport.height;
+                  canvas.width = viewport.width;
+
+                  var renderContext = {
+                      canvasContext: context,
+                      viewport: viewport
+                  };
+
+                  page.render(renderContext).promise.then(function() {
+                      var imageData = canvas.toDataURL("image/jpeg");
+                      selectedPdf.addImage(imageData, "JPEG", 0, 0, viewport.width, viewport.height);
+                      if (i === selectedPages.length - 1) {
+                          // Save the new PDF when all pages have been added
+                          selectedPdf.save("selected_pages.pdf");
+                      }
+                  });
+              });
+          }
+      });
+
+      // Update the selected pages array when a page is clicked
+      pageNumbersList.addEventListener("click", function(event) {
+          var pageNumber = parseInt(event.target.innerText.substr(5));
+          var index = selectedPages.indexOf(pageNumber);
+
+          if (index === -1) {
+              // Page is not selected, add it to the array
+              selectedPages.push(pageNumber);
+              event.target.classList.add("selected");
+          } else {
+              // Page is already selected, remove it from the array
+              selectedPages.splice(index, 1);
+              event.target.classList.remove("selected");
+          }
+      });
+
+      // Initial rendering with the first page
+      renderPage(1);
+  });
+</script>
+</body>
+</html>

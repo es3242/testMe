@@ -27,6 +27,14 @@ public class FreeboardController {
         return "klist";
     }
 
+
+    @GetMapping("/search")
+    public String search(@RequestParam("query") Long query, Model model) {
+        List<Freeboard> searchResults = freeboardService.searchFreeboards(query);
+        model.addAttribute("freeboards", searchResults); // Update the attribute name to match the template
+        return "klist";
+    }
+
  /*
 
     @GetMapping(value = "/list")

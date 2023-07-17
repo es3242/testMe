@@ -124,8 +124,17 @@ public class PdftextController {
         return "pdftext";
     }
 
+    @GetMapping("/pdfviewjpg")
+    public String showPdfViewerJpg() {
+        return "pdfviewjpg";
+    }
 
-    @GetMapping("/pdfauto")
+    @GetMapping("/pdfviewpdf")
+    public String showPdfViewerPdf() {
+        return "pdfviewpdf";
+    }
+
+   /* @GetMapping("/pdfauto")
     public String pdfauto(Model model) {
         Random random = new Random();
         PDDocument document = null;
@@ -189,12 +198,14 @@ public class PdftextController {
 
                     // Parse the response JSON
                     ObjectMapper objectMapper = new ObjectMapper();
-                    List<Map<String, Object>> questions = objectMapper.readValue(response, new TypeReference<List<Map<String, Object>>>() {});
+                    Map<String, Object> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {});
+                    List<String> testList = (List<String>) responseMap.get("Test");
+                    List<String> solutionsList = (List<String>) responseMap.get("Solutions");
 
-                    // Add the questions data to the model
-                    model.addAttribute("questions", questions);
-
-                    // Return the name of the HTML view to render
+                    // Add the lists and other data to the model
+                    model.addAttribute("tests", testList);
+                    model.addAttribute("solutions", solutionsList);
+                    System.out.println("Server testList: " + testList);
 
                 } else {
                     // handle error response
@@ -219,7 +230,6 @@ public class PdftextController {
         }
 
         return "pdfauto";
-    }
-
+    }*/
 
 }
