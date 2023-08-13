@@ -1,18 +1,21 @@
 package com.study.board.controller;
 
+import com.study.board.DTO.CommentDTO;
 import com.study.board.entity.Comment;
 import com.study.board.entity.Community;
 import com.study.board.entity.User;
+import com.study.board.repository.CommentRepository;
 import com.study.board.service.CommentService;
 import com.study.board.service.CommunityService;
 import com.study.board.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comment")
@@ -26,6 +29,9 @@ public class CommentController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     /*@PostMapping("/create")
     public ResponseEntity<String> createComment(
@@ -67,6 +73,23 @@ public class CommentController {
             }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{community_id}/comments")
+    public ResponseEntity<List<CommentDTO>> getCommentsByCommunityId(
+            @PathVariable("community_id") long communityId) {
+
+        List<Comment> comments = commentRepository.findByCommunityId(communityId);
+
+        if (!comments.isEmpty()) {
+            List<CommentDTO> commentDTOs = comments.stream()
+                    .map(comment -> new CommentDTO(comment.getId(), comment.getContent()))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(commentDTOs); // 200 OK 상태의 JSON 응답 반환
+        } else {
+            return ResponseEntity.notFound().build(); // 해당 커뮤니티에 대한 댓글이 없는 경우 404 Not Found 상태 반환
         }
     }
 

@@ -32,8 +32,8 @@ public class Community {
     @Column(name = "likes")
     private int likes;
 
-    @Column(name = "looking")
-    private int looking;
+    @Column(name = "view")
+    private int view;
 
     @Column(name = "add_file", length = 255)
     private String addFile;
@@ -111,12 +111,12 @@ public class Community {
         this.likes = likes;
     }
 
-    public int getLooking() {
-        return looking;
+    public int getView() {
+        return view;
     }
 
-    public void setLooking(int looking) {
-        this.looking = looking;
+    public void setView(int view) {
+        this.view = view;
     }
 
     public String getAddFile() {

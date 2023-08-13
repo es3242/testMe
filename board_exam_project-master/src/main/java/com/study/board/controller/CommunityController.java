@@ -1,7 +1,10 @@
 package com.study.board.controller;
 
+import com.study.board.entity.Comment;
 import com.study.board.entity.Community;
 import com.study.board.entity.User;
+import com.study.board.repository.CommentRepository;
+import com.study.board.service.CommentService;
 import com.study.board.service.CommunityService;
 import com.study.board.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,12 @@ public class CommunityController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @GetMapping("/list")
     public List<Community> list() {
@@ -186,4 +195,16 @@ public class CommunityController {
         }
     }
 
+    @GetMapping("/view/{id}") //게시글 조회 + 조회시 조회수 증가
+    public ResponseEntity<Community> viewPost(@PathVariable("id") long id) {
+        Optional<Community> communityOptional = communityService.getCommunityById(id);
+        if (communityOptional.isPresent()) {
+            Community community = communityOptional.get();
+            community.setView(community.getView() + 1); // 조회수 증가
+            communityService.updateCommunity(id, community); // 업데이트된 게시글 저장
+            return ResponseEntity.ok(community); // 200 OK 상태의 JSON 응답 반환
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found 상태 반환
+        }
+    }
 }
