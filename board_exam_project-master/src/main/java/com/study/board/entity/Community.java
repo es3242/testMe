@@ -47,8 +47,8 @@ public class Community {
     @Column(name = "update_at", nullable = false)
     private LocalDateTime updateAt;
 
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "int default 1")
-    private int isDeleted;
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
 
     @Column(name = "comment_number", nullable = false)
     private int commentNumber;
@@ -151,11 +151,11 @@ public class Community {
         this.updateAt = updateAt;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

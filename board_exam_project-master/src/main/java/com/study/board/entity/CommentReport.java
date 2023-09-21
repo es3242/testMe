@@ -1,7 +1,7 @@
 package com.study.board.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment_report")
@@ -12,7 +12,7 @@ public class CommentReport {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Many comment reports can be associated with one comment
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", referencedColumnName = "ID", nullable = false)
     private Comment comment;
 
@@ -20,11 +20,38 @@ public class CommentReport {
     private String rContent;
 
     @Column(name = "create_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
+    private LocalDateTime createAt;
 
-    // Constructors, getters, and setters...
+    // Getter and Setter methods
+    public int getId() {
+        return id;
+    }
 
-    // Additional methods as needed...
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
+    public String getRContent() {
+        return rContent;
+    }
+
+    public void setRContent(String rContent) {
+        this.rContent = rContent;
+    }
+
+    public LocalDateTime getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(LocalDateTime createAt) {
+        this.createAt = createAt;
+    }
 }
-

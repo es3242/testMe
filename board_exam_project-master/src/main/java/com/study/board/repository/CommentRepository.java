@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByCommunityId(Long communityId); //게시글 댓글 생성 순으로 오름차순 정렬
+    List<Comment> findByCommunityIdAndIsDeleted(Long communityId, boolean isDeleted);
 
 }
+

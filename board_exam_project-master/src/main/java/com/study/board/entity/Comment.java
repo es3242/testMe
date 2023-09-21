@@ -1,5 +1,7 @@
 package com.study.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -13,7 +15,8 @@ public class Comment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // Ignore Hibernate proxy properties
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,7 +30,7 @@ public class Comment {
     private int report;
 
     @Column(name = "is_deleted", nullable = false)
-    private int isDeleted;
+    private boolean isDeleted;
 
     @Column(name = "create_at", nullable = false)
     private LocalDateTime createdAt;
@@ -81,11 +84,11 @@ public class Comment {
         this.report = report;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

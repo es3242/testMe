@@ -3,6 +3,7 @@ package com.study.board.repository;
 import com.study.board.entity.Community;
 import com.study.board.entity.Freeboard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,4 +16,7 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
     List<Community> findByTitleContaining(String keyword); //제목으로 검색할 때 사용하는 함수
 
     List<Community> findByContentContaining(String keyword);
+
+    @Query("SELECT c FROM Community c WHERE c.isDeleted = true")
+    List<Community> findDeletedCommunities();
 }
