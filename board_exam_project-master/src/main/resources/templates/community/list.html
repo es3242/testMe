@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="TemplateMo">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <title>Education Meeting HTML5 Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="../assets/css/fontawesome.css">
+    <link rel="stylesheet" href="../assets/css/templatemo-edu-meeting.css">
+    <link rel="stylesheet" href="../assets/css/owl.css">
+    <link rel="stylesheet" href="../assets/css/lightbox.css">
+    <!--
+
+    TemplateMo 569 Edu Meeting
+
+    https://templatemo.com/tm-569-edu-meeting
+
+    -->
+
+</head>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .contact-us {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-form {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-form select,
+  .search-form button {
+    margin-left: 10px;
+  }
+
+</style>
+<body>
+
+<!-- Sub Header -->
+<div class="sub-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-sm-8">
+                <div class="left-content">
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                <div class="right-icons">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/" class="logo">
+                        TEST ME
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/Kcommunity/list">자유 게시판 list</a></li>
+                        <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/pdf">pdf리스트</a></li>
+                        <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/pdf" onclick="alert('로그인이 필요합니다.'); return false;">pdf리스트</a></li>
+                        <li class="has-sub" th:if="${#session != null && #session.getAttribute('user') != null}">
+                            <a href="javascript:void(0)">PDF</a>
+                            <ul class="sub-menu">
+                                <li><a href="/pdfup">PDF업로드</a></li>
+                                <li><a href="/pdftext">PDFtext</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-sub" th:if="${#session == null || #session.getAttribute('user') == null}">
+                            <a href="javascript:void(0)">PDF</a>
+                            <ul class="sub-menu">
+                                <li><a href="/pdfup" onclick="alert('로그인이 필요합니다.'); return false;">PDF업로드</a></li>
+                                <li><a href="/pdftext" onclick="alert('로그인이 필요합니다.'); return false;">PDFtext</a></li>
+                            </ul>
+                        </li>
+                        <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/mypage">마이페이지</a></li>
+                        <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/register">회원가입</a></li>
+                        <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/logout" class="active">logout</a></li>
+                        <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/login" class="active">login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<!-- ***** Main Banner Area Start ***** -->
+<section class="contact-us">
+    <div class="container">
+        <div class="row">
+        <div class="col-lg-12 align-self-center">
+            <div class="section-heading text-center" style="display: flex; align-items: center; justify-content: space-between;">
+                <h2 class="section-heading" style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="margin-right: 20px; font-size: 36px;">자유 게시판</span>
+                    <span style="margin-right: 10px; font-size: 18px;"><a href="/your-page-url-1">버튼 1</a></span>
+                    <span style="margin-right: 10px; font-size: 18px;"><a href="/your-page-url-2">버튼 2</a></span>
+                    <span style="font-size: 18px;"><a href="/your-page-url-3">버튼 3</a></span>
+                </h2>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12" style="overflow-y: scroll; max-height: 400px; margin-bottom: 20px;">
+                    <form id="contact" action="/login" method="post">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Content ID</th>
+                                        <th>c_category</th> <!-- 게시판 유형 추가 -->
+                                        <th>s_category</th> <!-- 과목 유형 추가 -->
+                                        <th>Title</th>
+                                        <th>Content</th>
+                                        <th>User</th>
+                                        <th>Created At</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="community : ${communities}">
+                                        <td th:text="${community.id}"></td>
+                                        <td th:text="${community.cCategory}"></td> <!-- 게시판 유형 표시 -->
+                                        <td th:text="${community.sCategory}"></td> <!-- 과목 유형 표시 -->
+                                        <td>
+                                            <a th:href="@{'/Kcommunity/view/' + ${community.id}}">
+                                                <span th:text="${community.title}"></span>
+                                            </a>
+                                        </td>
+                                        <td th:text="${community.content}"></td>
+                                        <td th:text="${community.user.id}"></td>
+                                        <td th:text="${community.createAt}"></td>
+                                        <td>
+                                            <a th:href="@{/edit/{id}(id=${community.id})}">Edit</a>
+                                            <a th:href="@{/delete/{id}(id=${community.id})}">Delete</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8" style="text-align: right;"> <!--colspan에 게시글 조회 란의 열 개수 쓰기-->
+                                            <a th:if="${#session != null && #session.getAttribute('user') != null}" href="/add" class="button">글 작성</a>
+                                            <a th:if="${#session == null || #session.getAttribute('user') == null}" href="/" onclick="alert('로그인이 필요합니다.'); return false;" class="button">글 작성</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-12" style="overflow-y: scroll; max-height: 400px;">
+                    <div class="search-form">
+                        <form method="get" id="searchForm" class="d-flex">
+                            <input type="text" class="form-control" style="flex: 2;" placeholder="검색" name="query" id="searchQuery">
+                            <select class="form-select" style="flex: 1;" id="searchType" name="searchType">
+                                <option value="" selected>선택</option>
+                                <option value="title">제목으로 검색</option>
+                                <option value="content">내용으로 검색</option>
+                            </select>
+                            <button class="btn btn-primary" style="margin-left: 10px;" type="submit" id="searchButton">검색</button>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                        // 검색 버튼 클릭 시 검색 유형을 확인하고 알림 메시지 표시
+                        document.getElementById("searchButton").addEventListener("click", function (e) {
+                            var selectedValue = document.getElementById("searchType").value;
+                            var searchQuery = document.getElementById("searchQuery").value;
+
+                            if (selectedValue === "" || searchQuery === "") {
+                                alert("검색 유형과 검색어를 모두 입력해주세요.");
+                                e.preventDefault(); // 폼 제출을 막음
+                            }
+                        });
+
+                        // 드롭다운 메뉴가 변경될 때 폼의 action을 설정
+                        document.getElementById("searchType").addEventListener("change", function () {
+                            var selectedValue = this.value;
+                            var form = document.getElementById("searchForm");
+
+                            // 선택한 검색 유형에 따라 action 설정
+                            if (selectedValue === "title") {
+                                form.action = "/Kcommunity/titleSearch";
+                            } else if (selectedValue === "content") {
+                                form.action = "/Kcommunity/contentSearch";
+                            }
+
+                            // 검색 유형을 변경할 때마다 쿼리 매개변수를 삭제
+                            var currentURL = new URL(window.location.href);
+                            currentURL.searchParams.delete("searchType");
+                            window.history.replaceState({}, document.title, currentURL.toString());
+                        });
+                    </script>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- ***** Main Banner Area End ***** -->
+
+
+
+
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/lightbox.js"></script>
+<script src="assets/js/tabs.js"></script>
+<script src="assets/js/video.js"></script>
+<script src="assets/js/slick-slider.js"></script>
+<script src="assets/js/custom.js"></script>
+<script>
+    //according to loftblog tut
+    $('.nav li:first').addClass('active');
+
+    var showSection = function showSection(section, isAnimate) {
+        var
+            direction = section.replace(/#/, ''),
+            reqSection = $('.section').filter('[data-section="' + direction + '"]'),
+            reqSectionPos = reqSection.offset().top - 0;
+
+        if (isAnimate) {
+            $('body, html').animate({
+                scrollTop: reqSectionPos
+            }, 800);
+        } else {
+            $('body, html').scrollTop(reqSectionPos);
+        }
+
+    };
+
+    var checkSection = function checkSection() {
+        $('.section').each(function () {
+            var
+                $this = $(this),
+                topEdge = $this.offset().top - 80,
+                bottomEdge = topEdge + $this.height(),
+                wScroll = $(window).scrollTop();
+            if (topEdge < wScroll && bottomEdge > wScroll) {
+                var
+                    currentId = $this.data('section'),
+                    reqLink = $('a').filter('[href*=\\#' + currentId + ']');
+                reqLink.closest('li').addClass('active').
+                siblings().removeClass('active');
+            }
+        });
+    };
+
+    $('.main-menu, .responsive-menu, .scroll-to-section').on('click', 'a', function (e) {
+        e.preventDefault();
+        showSection($(this).attr('href'), true);
+    });
+
+    $(window).scroll(function () {
+        checkSection();
+    });
+</script>
+</body>
+
+</html>
