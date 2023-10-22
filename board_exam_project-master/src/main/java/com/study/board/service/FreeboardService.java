@@ -59,4 +59,15 @@ public class FreeboardService {
     public List<Freeboard> getContentByUserId(Long userId){ //user의 id를 받아서 user Id로 작성된 글들을 찾아 Freeboard 타입 리스트로 반환
         return freeboardRepository.findAllByUserId(userId);
     }
+
+
+
+    // s operation
+
+    public List<Freeboard> searchFreeboards(Long query) {
+        return freeboardRepository.findAllByUserId(query); // Modify the query method to match your search criteria
+    }
+
+
+
 }
