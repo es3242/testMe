@@ -7,15 +7,13 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import axios from "axios";
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   useNavigate,
 } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import bg from "./img/bg.png";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Upload from "./pages/Upload";
@@ -32,12 +30,11 @@ import { useRecoilState } from "recoil";
 import loginState from "./Atoms";
 import MyPage from "./pages/MyPage";
 import EditManualQuestion from "./pages/editmanualquestion";
-import sourcevideo from "./img/course-video.mp4";
+import MainPage from "./pages/MainPage";
+import MyPDF from "./pages/MyPDF";
+import MyBoard from "./pages/MyBoard";
 
 function App() {
-  const [hello, setHello] = useState("");
-  const [msg, setMsg] = useState([]);
-  const [message, setMessage] = useState([]);
   const [loggedIn, setLoggedIn] = useRecoilState(loginState);
   let navigate = useNavigate();
 
@@ -60,43 +57,6 @@ function App() {
       });
   };
 
-  /*
-  useEffect(() => {
-    axios
-      .get("/api/hello")
-      .then((response) => setHello(response.data))
-      .catch((error) => console.log(error));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get("/list")
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error));
-  }, []);
-
-
-  useEffect(() => {
-    fetch("/hello")
-      .then((response) => {
-        return response.json();
-      })
-      .then(function (data) {
-        setMessage(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/demo-web")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setMessage(data);
-      });
-  }, []);
-  */
-
   return (
     <div>
       <Navbar bg="light" variant="light">
@@ -108,7 +68,7 @@ function App() {
                 navigate("/");
               }}
             >
-              {/* <Link to="/">홈</Link> */}홈
+              홈
             </Nav.Link>
             <Nav.Link
               onClick={() => {
@@ -119,7 +79,6 @@ function App() {
                 }
               }}
             >
-              {/* <Link to="/detail">상세페이지</Link> */}
               문제출제
             </Nav.Link>
             <Nav.Link
@@ -127,7 +86,6 @@ function App() {
                 navigate("/board");
               }}
             >
-              {/* <Link to="/detail">상세페이지</Link> */}
               커뮤니티
             </Nav.Link>
           </Nav>
@@ -139,7 +97,6 @@ function App() {
                     navigate("/login");
                   }}
                 >
-                  {/* <Link to="/detail">상세페이지</Link> */}
                   로그인
                 </Nav.Link>
                 <Nav.Link
@@ -147,7 +104,6 @@ function App() {
                     navigate("/register");
                   }}
                 >
-                  {/* <Link to="/detail">상세페이지</Link> */}
                   회원가입
                 </Nav.Link>
               </>
@@ -158,7 +114,6 @@ function App() {
                     navigate("/mypage");
                   }}
                 >
-                  {/* <Link to="/detail">상세페이지</Link> */}
                   마이페이지
                 </Nav.Link>
                 <Nav.Link
@@ -166,7 +121,6 @@ function App() {
                     logout();
                   }}
                 >
-                  {/* <Link to="/detail">상세페이지</Link> */}
                   로그아웃
                 </Nav.Link>
               </>
@@ -175,71 +129,7 @@ function App() {
         </Container>
       </Navbar>
       <Routes>
-        <Route
-          path=""
-          element={
-            <>
-              <div
-                className="hero-section bg-dark text-white d-flex text-center align-items-center mb-4"
-                style={{ paddingTop: "10rem", paddingBottom: "10rem" }}
-              >
-                <div className="video-background">
-                  <video
-                    playsInline="playsinline"
-                    autoPlay="autoplay"
-                    muted="muted"
-                    loop="loop"
-                  >
-                    <source src={sourcevideo} type="video/mp4" />
-                  </video>
-                </div>
-                <div className="container text-center">
-                  <h1 className="display-3 text-white">TestMe</h1>
-                  <p className="lead text-white">
-                    TestMe로 문제를 쉽게 생성하고 풀어보세요!
-                  </p>
-                </div>
-              </div>
-
-              <div className="container">
-                <h1 className="display-9 text-black text-center mb-5">
-                  우수 학습자 랭킹
-                </h1>
-              </div>
-              <div className="container">
-                <table className="table table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th>순위</th>
-                      <th>이름</th>
-                      <th>점수</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>홍길동</td>
-                      <td>100</td>
-                    </tr>
-                    {/* 더 많은 학습자들의 랭킹 정보를 표시하는 로직 */}
-                  </tbody>
-                </table>
-              </div>
-              {/*
-              
-                          백엔드에서 가져온 데이터입니다 : {hello}
-              <br />
-              백엔드에서 가져온 데이터입니다 : {message}
-              <ul>
-                {message.map((text, index) => (
-                  <li key={`${index}-${text}`}>{text}</li>
-                ))}
-              </ul>
-            
-          */}
-            </>
-          }
-        ></Route>
+        <Route path="" element={<MainPage />}></Route>
         <Route path="/make" element={<QuestionForm />}></Route>
         <Route path="/makecomplete" element={<MakeComplete />}></Route>
         <Route path="/edit" element={<EditQuestion />}></Route>
@@ -254,35 +144,10 @@ function App() {
         <Route path="/board-view/" element={<BoardView />}></Route>
         <Route path="/board-edit/" element={<BoardEdit />}></Route>
         <Route path="/mypage" element={<MyPage />}></Route>
-
-        <Route path="/about" element={<About />}>
-          <Route path="member" element={<div>멤버임</div>} />
-          <Route path="location" element={<div>위치정보임</div>} />
-        </Route>
-        <Route path="/event" element={<EventPage />}>
-          <Route path="one" element={<p>첫 주문시 양배추즙 서비스</p>} />
-          <Route path="two" element={<p>생일기념 쿠폰받기</p>} />
-        </Route>
+        <Route path="/myPDF" element={<MyPDF />}></Route>
+        <Route path="/myBoard" element={<MyBoard />}></Route>
         <Route path="*" element={<div>읎어요</div>} />
       </Routes>
-    </div>
-  );
-}
-
-function About() {
-  return (
-    <div>
-      <h4>회사정보임</h4>
-      <Outlet>{/* Nested 안에 있는 것들을 보여주는 자리 */}</Outlet>
-    </div>
-  );
-}
-
-function EventPage() {
-  return (
-    <div>
-      <h4>오늘의 이벤트</h4>
-      <Outlet>{/* Nested 안에 있는 것들을 보여주는 자리 */}</Outlet>
     </div>
   );
 }
