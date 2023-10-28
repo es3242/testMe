@@ -43,22 +43,11 @@ public class CommunityController {
     @Autowired
     private CommentRepository commentRepository;
 
-    /*@GetMapping("/list")
-    public List<Community> list() {
-        return communityService.getAllCommunities();
-    }//is_deleted 관계없이 모두 조회*/
 
     @GetMapping("/list") //is_deletd가 true인 community만 조회
     public List<Community> list() {
         return communityService.getDeletedCommunities();
     }
-
-
-    /*@GetMapping("/search") //사용하지 않음
-    public List<Community> search(@RequestParam("query") Long query) {
-        return communityService.searchCommunities(query);
-    }*/
-
 
 
     /*@GetMapping("/titleSearch") //제목 검색
