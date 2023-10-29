@@ -172,27 +172,44 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+                            <!--<div style="margin-bottom: 20px; display: flex; justify-content: space-between;">
                                 <button class="btn-view-comments" th:onclick="'redirectToCommentsPage(\'' + ${community.id} + '\')'">댓글작성</button>
+                            </div>-->
+                            <div style="border-bottom: 3px solid #ddd; margin-top: 10px; margin-bottom: 10px;"></div>
+                            <div th:if="${comments.size() > 0}">
+                                <div th:each="comment : ${comments}" style="margin-top: 10px; padding: 10px;">
+                                    <table style="width:100%; border-collapse: collapse;">
+                                        <tr style="background-color: #f2f2f2;">
+                                            <th style="padding: 5px; border: 1px solid #ddd;">작성자 ID</th>
+                                            <th style="padding: 5px; border: 1px solid #ddd;">작성일</th>
+                                        </tr>
+                                        <tr style="border: 1px solid #ddd;">
+                                            <td style="padding: 5px; border: 1px solid #ddd;"><span th:text="${comment.user.id}"></span></td>
+                                            <td style="padding: 5px; border: 1px solid #ddd;"><span th:text="${comment.createdAt}"></span></td>
+                                        </tr>
+                                        <tr style="border: 1px solid #ddd;">
+                                            <td colspan="2" style="padding: 5px; border: 1px solid #ddd;"><span th:text="${comment.content}"></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
-                            <div style="border-bottom: 5px solid #ddd; margin-bottom: 10px;"></div>
-                            <div>
-                                <table th:if="${comments.size() > 0}" style="width:100%; border-collapse: collapse;">
-                                    <tr style="background-color: #f2f2f2;">
-                                        <th style="padding: 5px; border: 1px solid #ddd;">작성자 ID</th>
-                                        <th style="padding: 5px; border: 1px solid #ddd;">작성일</th>
-                                    </tr>
-                                    <tr th:each="comment : ${comments}" style="border: 1px solid #ddd;">
-                                        <td style="padding: 5px; border: 1px solid #ddd;"><span th:text="${comment.user.id}"></span></td>
-                                        <td style="padding: 5px; border: 1px solid #ddd;"><span th:text="${comment.createdAt}"></span></td>
-                                    </tr>
-                                    <tr th:each="comment : ${comments}" style="border: 1px solid #ddd;">
-                                        <td colspan="2" style="padding: 5px; border: 1px solid #ddd;"><span th:text="${comment.content}"></span></td>
-                                    </tr>
-                                </table>
-                                <p th:unless="${comments.size() > 0}">댓글이 존재하지 않습니다.</p>
-                            </div>
+                            <p th:unless="${comments.size() > 0}">댓글이 존재하지 않습니다.</p>
                         </form>
+                        <div style="margin-top: 10px; margin-bottom: 10px;"></div>
+                        <div id="comment-form" th:if="${#session != null && #session.getAttribute('user') != null}">
+                            <form action="/Kcomment/create" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="comment" name="content" rows="1" required>댓글을 작성해주세요.</textarea>
+                                    <input type="hidden" name="user_id" th:value="${#session.getAttribute('user')}" />
+                                    <input type="hidden" name="community_id" th:value="${community.id}" />
+                                    <button class="btn-view-comments" type="submit">댓글작성</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div style="border: 1px solid #ddd; border-radius: 5px; padding: 15px; background-color: #fff;" th:if="${#session == null || #session.getAttribute('user') == null}">
+                            <h6>댓글을 작성하려면 로그인이 필요합니다.</h6>
+                        </div>
+
                         <div class="button-group" style="margin-top: 20px; display: flex; justify-content: space-between;">
                             <button class="btn-list" onclick="window.location.href='/Kcommunity/list'">목록</button>
                             <!--<button class="btn-report" onclick="window.location.href='/reprot/community'">신고</button>-->
@@ -217,7 +234,6 @@
 <script src="../../assets/js/slick-slider.js"></script>
 <script src="../../assets/js/custom.js"></script>
 <script>
-    <script>
     //according to loftblog tut
     $('.nav li:first').addClass('active');
 
