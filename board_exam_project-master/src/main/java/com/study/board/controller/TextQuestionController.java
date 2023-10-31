@@ -37,7 +37,7 @@ public class TextQuestionController {
     }
 
     @GetMapping("/display")
-    public String displayText(Model model) throws IOException {
+    public String displayText(@RequestParam("pdfId") Integer pdfId, Model model) throws IOException {
         // txt 파일 경로 설정
         String txtFilePath = "./pdf/test.txt";
 
@@ -52,6 +52,7 @@ public class TextQuestionController {
         String[] pageTexts = content.split("Processed text from page \\d+:");
 
         // 모델에 데이터 추가
+        model.addAttribute("pdfId", pdfId);
         model.addAttribute("pageTexts", pageTexts);
         model.addAttribute("numberOfPages", numberOfPages);
 

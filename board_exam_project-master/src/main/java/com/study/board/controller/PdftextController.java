@@ -32,8 +32,8 @@ public class PdftextController {
         Random random = new Random();
         PDDocument document = null;
         String relativePath = ""; // Absolute path
-        String path = "C:/asdasd/test3.pdf"; // PDF file path
-        String outputFilePath = "C:/asdasd/test3.txt"; // output text file path
+        String path = "./pdf/test3.pdf"; //C:/asdasd/test3.pdf"; // PDF file path
+        String outputFilePath = "./pdf/test3.txt";//"C:/asdasd/test3.txt"; // output text file path
 
         try {
             document = PDDocument.load(new File(path)); // load PDF file
@@ -142,8 +142,8 @@ public class PdftextController {
     @GetMapping("/pdfauto")
     public String pdfauto(Model model) {
         PDDocument document = null;
-        String path = "C:/asdasd/test3.pdf"; // PDF 파일 경로
-        String outputFilePath = "C:/asdasd/test3.txt"; // 출력 텍스트 파일 경로
+        String path = "./pdf/test3.pdf";//"C:/asdasd/test3.pdf"; // PDF 파일 경로
+        String outputFilePath = "./pdf/test3.txt";//"C:/asdasd/test3.txt"; // 출력 텍스트 파일 경로
 
         try {
             document = PDDocument.load(new File(path)); // PDF 파일 로드
