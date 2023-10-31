@@ -44,7 +44,7 @@ public class MyPageController {
             User user = userService.getUserInfo(userId);
             System.out.println(user);
 
-            List<Community> userCommunities = communityService.getContentByUserId(userId);
+            List<Community> userCommunities = communityService.getDeletedCommunitiesByUser(user);
 
             //List<Freeboard> userFreeboards = freeboardService.getContentByUserId(userId);
             System.out.println(userCommunities);

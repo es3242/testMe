@@ -214,8 +214,39 @@ public class KcommunityController {
         }
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteCommunity(@PathVariable("id") Long id, Model model) {
+        try {
+            Optional<Community> optionalCommunity = communityService.getCommunityById(id);
+            if (!optionalCommunity.isPresent()) {
+                model.addAttribute("error", "게시글을 찾을 수 없습니다.");
+                return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+            }
+            Community existingCommunity = optionalCommunity.get();
 
+            if (existingCommunity == null) {
+                model.addAttribute("error", "게시글을 찾을 수 없습니다.");
+                return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+            }
 
+            // 이미 삭제된 경우
+            if (!existingCommunity.getIsDeleted()) {
+                model.addAttribute("error", "이미 삭제된 게시글입니다.");
+                return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+            }
 
+            // 커뮤니티의 is_deleted 값을 false로 설정하여 삭제합니다.
+            existingCommunity.setIsDeleted(false);
+
+            // 변경사항을 저장합니다.
+            communityService.updateCommunity(id, existingCommunity);
+
+            model.addAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
+            return "redirect:/mypage"; // kmypage 템플릿의 이름을 설정해야 합니다.
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "게시글 삭제에 실패했습니다.");
+            return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+        }
+    }
 
 }
