@@ -108,12 +108,17 @@ public class PdfUpController {
     public String getPdfList(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("user");
         List<Pdf> pdfList = pdfService.getPdfListByUserId(userId);
+
+        for (Pdf pdf : pdfList) {
+            String filePath = pdf.getFilePath();
+            String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+            System.out.println(fileName);
+            pdf.setFilePath(fileName); // 원본 pdfList의 각 원소의 filePath 수정
+        }
+
         model.addAttribute("pdfList", pdfList);
         return "kpdflist";
     }
-
-
-
 
 
     @PostMapping("/pdf/view")
