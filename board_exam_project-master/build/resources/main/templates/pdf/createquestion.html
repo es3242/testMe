@@ -80,11 +80,8 @@
             <label for="pdfname">PDF NAME:</label>
             <input type="text" id="pdfname" name="pdfname" th:value="${pdfname}" readonly/><br><br>
 
-            <label for="pdfId">PDF ID:</label>
-            <input type="text" id="pdfId" name="pdfId" th:value="${pdfId}" readonly/><br><br>
-
-            <label for="user_id">User:</label>
-            <input type="text" th:value="${#session.getAttribute('user')}" name="user_id" id="user_id" readonly/>
+            <input type="hidden" name="pdfId" th:value="${pdfId}" />
+            <input type="hidden" name="user_id" th:value="${#session.getAttribute('user')}" />
 
             <ul th:each="page, pageIdx : ${#numbers.sequence(0, numberOfPages-1)}">
                 <li>
