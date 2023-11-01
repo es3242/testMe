@@ -53,7 +53,7 @@ public class TextQuestionController {
         //
         PDDocument document = null;
         String path =filePath; // PDF file path
-        String outputFilePath = "C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
+        String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
 
         try {
             document = PDDocument.load(new File(path)); // load PDF file

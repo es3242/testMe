@@ -36,7 +36,7 @@ public class PdftextController {
         Random random = new Random();
         PDDocument document = null;
         String path =filePath; // PDF file path
-        String outputFilePath = "C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
+        String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
         try {
             document = PDDocument.load(new File(path)); // load PDF file
             PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
@@ -148,7 +148,7 @@ public class PdftextController {
         Random random = new Random();
         PDDocument document = null;
         String path =filePath; // PDF file path
-        String outputFilePath = "C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
+        String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
 
         try {
             document = PDDocument.load(new File(path)); // PDF 파일 로드
