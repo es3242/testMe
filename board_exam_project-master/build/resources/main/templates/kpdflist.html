@@ -154,7 +154,7 @@ body {
                                                       <input type="hidden" th:name="filePath" th:value="${pdf.filePath}" />
                                                       <button type="submit">View</button>
                                                   </form>
-
+                                                  <a th:href="@{/pdftext/{filepath}(filepath=${pdf.filePath})}">PDF 확인</a>
                                               </td>
                                           </tr>
                                           </tbody>
