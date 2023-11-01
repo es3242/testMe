@@ -2,8 +2,10 @@ package com.study.board.repository;
 
 import com.study.board.entity.Community;
 import com.study.board.entity.Freeboard;
+import com.study.board.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,4 +21,7 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
 
     @Query("SELECT c FROM Community c WHERE c.isDeleted = true")
     List<Community> findDeletedCommunities();
+
+    @Query("SELECT c FROM Community c WHERE c.isDeleted = true AND c.user = :user")
+    List<Community> findDeletedCommunitiesByUser(@Param("user") User user);
 }

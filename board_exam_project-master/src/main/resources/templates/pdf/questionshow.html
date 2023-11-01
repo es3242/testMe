@@ -1,77 +1,42 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Display Questions</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 90%;
-            max-width: 800px;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #7E8EFB;
-            color: white;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .add-button {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+    <title>문제 풀어보기</title>
 </head>
 <body>
 <h1>Questions</h1>
-<table>
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Question</th>
-        <th>Options</th>
-        <th>Answer</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="question, questionStat : ${questions}">
-        <td th:text="${questionStat.index}"></td>
-        <td th:text="${question.questionText}"></td>
-        <td th:text="${question.options}"></td>
-        <td th:text="${question.answer}"></td>
-    </tr>
-    </tbody>
-</table>
+<form th:each="question, questionStat : ${questions}" th:id="'form_' + ${questionStat.index}">
+    <h2 th:text="${question.questionText}"></h2>
+    <ul>
+        <li th:each="option : ${question.options}">
+            <p th:text="${option}"></p>
+        </li>
+    </ul>
+    <input type="text" th:id="'answer_' + ${questionStat.index}" th:placeholder="'답을 입력해주세요.'" required>
+    <button type="button" th:data-index="${questionStat.index}" th:data-answer="${question.answer}" onclick="checkAnswer(this.getAttribute('data-index'), this.getAttribute('data-answer'), this)">채점하기</button>
+    <p th:id="'result_' + ${questionStat.index}" style="display: none"></p>
+    <p th:id="'correctAnswerLabel_' + ${questionStat.index}" style="display: none">정답: <span th:text="${question.answer}" style="font-weight: bold" th:id="'correctAnswer_' + ${questionStat.index}"></span></p>
+</form>
+
+<script th:inline="javascript">
+    function checkAnswer(index, answer, button) {
+        var userAnswer = document.getElementById('answer_' + index).value;
+
+        var resultDisplay = document.getElementById('result_' + index);
+        var correctAnswerDisplay = document.getElementById('correctAnswer_' + index);
+        var correctAnswerLabel = document.getElementById('correctAnswerLabel_' + index);
+        if (userAnswer === answer) {
+            resultDisplay.textContent = "정답입니다!";
+            resultDisplay.style.color = "green";
+        } else {
+            resultDisplay.textContent = "오답입니다.";
+            resultDisplay.style.color = "red";
+        }
+        resultDisplay.style.display = "block";
+        correctAnswerDisplay.style.display = "block";
+        correctAnswerLabel.style.display = "block";
+        button.style.display = "none";
+    }
+</script>
 </body>
 </html>
