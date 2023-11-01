@@ -8,6 +8,7 @@ import com.study.board.repository.QuestionRepository;
 import com.study.board.repository.UserRepository;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,8 +138,9 @@ public class TextQuestionController {
             questionRepository.save(question);
         }
 
-        return "redirect:/";
+        return "redirect:/display/" + pdfId + "/" + userId + "/questions";
     }
+
 
     @GetMapping("/display/{pdfId}/{userId}/questions")
     public String getSavedQuestions(@PathVariable("pdfId") Integer pdfId, @PathVariable("userId") Long userId, Model model) {
@@ -146,6 +148,4 @@ public class TextQuestionController {
         model.addAttribute("questions", savedQuestions);
         return "pdf/questionshow";
     }
-
-
 }
