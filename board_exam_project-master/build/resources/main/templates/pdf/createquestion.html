@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>PDF 텍스트 추출</title>
+    <title>수동 문제 출제</title>
     <style>
         .page-divider {
             border-top: 1px solid black;
@@ -28,14 +28,10 @@
 
     <!-- 오른쪽 영역: 사용자 정보 입력 -->
     <div style="float: right; width: 50%;">
-        <h2>사용자 정보 입력</h2>
-        <form action="/display" method="post">
-            <!-- 오른쪽 최상단: pdf_id 입력 -->
-            <label for="pdfId">PDF ID:</label>
-            <input type="text" id="pdfId" name="pdfId" required/><br><br>
-            <!-- 오른쪽 최상단: user_id 입력 -->
-            <label for="userId">User ID:</label>
-            <input type="number" id="userId" name="user_id" required/><br><br>
+        <h2>문제 출제하기</h2>
+        <form action="/display" method="post"> <!--pdfId, userId 모두 비공개로 전달-->
+            <input type="hidden" name="pdfId" th:value="${pdfId}" />
+            <input type="hidden" name="user_id" th:value="${#session.getAttribute('user')}" />
 
             <!-- 페이지 수와 동일한 개수의 정보 입력 칸 생성 -->
             <ul th:each="page, pageIdx : ${#numbers.sequence(0, numberOfPages-1)}">

@@ -1,5 +1,6 @@
 package com.study.board.controller;
 
+import com.study.board.entity.Comment;
 import com.study.board.entity.Community;
 import com.study.board.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class KcommunityController {
     @Autowired
     private CommunityService communityService;
 
+    @Autowired
+    private CommentService commentService;
+
 
     @GetMapping("/list")
     public String list(Model model) {
@@ -62,13 +66,6 @@ public class KcommunityController {
 
         model.addAttribute("communities", communities);
         return "community/list";
-    }
-
-
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("message", "자유게시판 폼이 제공됩니다.");
-        return "community/form";
     }
 
     @GetMapping("/titleSearch")
@@ -114,7 +111,7 @@ public class KcommunityController {
         return "community/contentSearchResults"; // 검색 결과를 표시하는 Thymeleaf 템플릿의 이름
     }
 
-    @GetMapping("/view/{id}") //게시글 개별 조회
+    /*@GetMapping("/view/{id}") //게시글 개별 조회
     public String viewPost(@PathVariable("id") long id, Model model) {
         Optional<Community> communityOptional = communityService.getCommunityById(id);
         if (communityOptional.isPresent()) {
@@ -130,9 +127,32 @@ public class KcommunityController {
         } else {
             return "redirect:/error404"; // 404 에러가 발생했을 때 안내창을 나타내는 URL
         }
+    }*/
+    @GetMapping("/view/{id}") //게시글 개별 조회
+    public String viewPost(@PathVariable("id") long id, Model model) {
+        Optional<Community> communityOptional = communityService.getCommunityById(id);
+        if (communityOptional.isPresent()) {
+            Community community = communityOptional.get();
+            if (community.getIsDeleted()) { // is_deleted가 true인 경우에만 조회 및 업데이트 진행
+                community.setView(community.getView() + 1); // 조회수 증가
+                communityService.updateCommunity(id, community); // 업데이트된 게시글 저장
+
+                // 아래의 코드를 사용하여 comment 데이터를 가져올 수 있습니다.
+                List<Comment> comments = commentService.getActiveCommentsByCommunityId(id); // 해당 게시글의 댓글 가져오기
+                model.addAttribute("community", community);
+                model.addAttribute("comments", comments); // 댓글 목록을 모델에 추가
+
+                return "community/view"; // HTML 템플릿의 이름
+            } else {
+                return "redirect:/error404"; // 404 에러가 발생했을 때 안내창을 나타내는 URL
+            }
+        } else {
+            return "redirect:/error404"; // 404 에러가 발생했을 때 안내창을 나타내는 URL
+        }
     }
 
-    @PostMapping("/increaseLikes/{id}")
+
+    /*@PostMapping("/increaseLikes/{id}")
     public String increaseLikes(@PathVariable("id") long id, Model model) {
         Optional<Community> communityOptional = communityService.getCommunityById(id);
         if (communityOptional.isPresent()) {
@@ -147,7 +167,86 @@ public class KcommunityController {
             // 해당 ID에 대한 커뮤니티가 없는 경우에 대한 처리
             return "error"; // 적절한 에러 뷰 이름을 반환합니다.
         }
+    }*/
+
+    @GetMapping("/form")
+    public String showCommunityForm(Model model) {
+        model.addAttribute("community", new Community());
+        return "community/form";
     }
 
+    @PostMapping("/create")
+    public String createPost(@ModelAttribute Community community, Model model) {
+        try {
+            // 새로 추가된 필드 초기화
+            community.setCommentNumber(0);
+
+            community.setcCategory(community.getcCategory());
+            community.setsCategory(community.getsCategory());
+
+
+            // 파일을 저장할 경로 설정 (예시로 C:/uploads 폴더에 저장)
+            /*String uploadDir = "./communityImages/";
+
+            if (file != null && !file.isEmpty()) {
+                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+                Path filePath = Paths.get(uploadDir + fileName);
+
+                Files.write(filePath, file.getBytes()); // IOException can be thrown here
+                community.setAddFile(filePath.toString());
+            }*/
+
+            // 사용자 정보 설정 (예: User 객체를 얻어온다고 가정)
+            // User user = userService.getUserInfo(userId); // 실제로는 UserService를 사용하여 사용자 정보를 얻어와야 합니다.
+            // community.setUser(user);
+
+            // 게시글 정보와 파일의 경로를 데이터베이스에 저장
+            Community savedCommunity = communityService.createCommunity(community);
+
+            // 성공 메시지와 함께 community/form 페이지 반환
+            model.addAttribute("successMessage", "Post created successfully.");
+            return "redirect:/Kcommunity/list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 실패 메시지와 함께 community/form 페이지 반환
+            model.addAttribute("errorMessage", "Failed to create post.");
+            return "community/list";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCommunity(@PathVariable("id") Long id, Model model) {
+        try {
+            Optional<Community> optionalCommunity = communityService.getCommunityById(id);
+            if (!optionalCommunity.isPresent()) {
+                model.addAttribute("error", "게시글을 찾을 수 없습니다.");
+                return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+            }
+            Community existingCommunity = optionalCommunity.get();
+
+            if (existingCommunity == null) {
+                model.addAttribute("error", "게시글을 찾을 수 없습니다.");
+                return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+            }
+
+            // 이미 삭제된 경우
+            if (!existingCommunity.getIsDeleted()) {
+                model.addAttribute("error", "이미 삭제된 게시글입니다.");
+                return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+            }
+
+            // 커뮤니티의 is_deleted 값을 false로 설정하여 삭제합니다.
+            existingCommunity.setIsDeleted(false);
+
+            // 변경사항을 저장합니다.
+            communityService.updateCommunity(id, existingCommunity);
+
+            model.addAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
+            return "redirect:/mypage"; // kmypage 템플릿의 이름을 설정해야 합니다.
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "게시글 삭제에 실패했습니다.");
+            return "error-page"; // 에러 페이지 템플릿의 이름을 설정해야 합니다.
+        }
+    }
 
 }

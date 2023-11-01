@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.io.*;
@@ -27,14 +29,14 @@ public class PdftextController {
     @Autowired
     private PdfService pdfService;
 
-    @GetMapping("/pdftext")
-    public String pdftext(Model model) {
+    @PostMapping("/pdf/text")
+    public String pdftext(@RequestParam("filePath") String filePath, Model model) {
+        String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
+
         Random random = new Random();
         PDDocument document = null;
-        String relativePath = ""; // Absolute path
-        String path = "C:/asdasd/test3.pdf"; // PDF file path
-        String outputFilePath = "C:/asdasd/test3.txt"; // output text file path
-
+        String path =filePath; // PDF file path
+        String outputFilePath = "C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
         try {
             document = PDDocument.load(new File(path)); // load PDF file
             PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
@@ -52,8 +54,8 @@ public class PdftextController {
 
                 writer.write("Processed text from page " + pageNum + ":\n"); // write the page numbers to the file
                 writer.write(pageText); // Write the processed text to a file
-                writer.write("\nOriginal text:\n"); // write original text to file
-                writer.write(pageText); // write original text to file
+                /*writer.write("\nOriginal text:\n"); // write original text to file
+                writer.write(pageText); // write original text to file*/
                 writer.write("\n");
 
                 // create JSON object for the page
@@ -139,11 +141,14 @@ public class PdftextController {
         return "pdfviewpdf";
     }
 
-    @GetMapping("/pdfauto")
-    public String pdfauto(Model model) {
+    @PostMapping("/pdf/pdfauto")
+    public String pdfauto(@RequestParam("filePath") String filePath, Model model) {
+        String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
+
+        Random random = new Random();
         PDDocument document = null;
-        String path = "C:/asdasd/test3.pdf"; // PDF 파일 경로
-        String outputFilePath = "C:/asdasd/test3.txt"; // 출력 텍스트 파일 경로
+        String path =filePath; // PDF file path
+        String outputFilePath = "C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
 
         try {
             document = PDDocument.load(new File(path)); // PDF 파일 로드
