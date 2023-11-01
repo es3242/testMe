@@ -1,4 +1,4 @@
-package com.study.board.controller;
+/*package com.study.board.controller;
 
 import com.study.board.DTO.CommentDTO;
 import com.study.board.entity.Comment;
@@ -141,8 +141,4 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 게시글입니다.");
         }
     }
-
-
-
-
-}
+}*/
