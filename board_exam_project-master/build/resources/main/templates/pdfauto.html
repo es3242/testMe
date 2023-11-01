@@ -1,40 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Questions View</title>
-  <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>PDF Auto</title>
+  <script>
+    function checkAnswer(index) {
+      var selectedAnswer = document.querySelector('input[name="answer_' + index + '"]:checked');
+      if (!selectedAnswer) {
+        alert("답을 선택하세요.");
+        return;
+      }
+
+      var selectedValue = selectedAnswer.value;
+      var solution = document.getElementById('solution_' + index).textContent;
+
+      if (selectedValue === solution) {
+        alert("정답입니다!");
+      } else {
+        alert("오답입니다.");
+      }
+    }
+  </script>
 </head>
 <body>
-<h1>Questions</h1>
-<table>
-  <tr>
-    <th>Question</th>
-    <th>Option 1</th>
-    <th>Option 2</th>
-    <th>Option 3</th>
-    <th>Option 4</th>
-    <th>Solution</th>
-  </tr>
-  <!-- Iterate over the questions data and generate table rows -->
-  <!-- Assuming questions is available as a model attribute -->
-  <tr th:each="question : ${questions}">
-    <td th:text="${question.question}"></td>
-    <td th:text="${question.d1}"></td>
-    <td th:text="${question.d2}"></td>
-    <td th:text="${question.d3}"></td>
-    <td th:text="${question.d4}"></td>
-    <td th:text="${question.solution}"></td>
-  </tr>
-</table>
+<h1>PDF Auto</h1>
+<form th:each="test, status : ${tests}" th:id="'form_' + ${status.index}">
+  <p>테스트 결과:</p>
+  <ul>
+    <li>
+      <h2 th:text="${test.question}"></h2>
+      <ul>
+        <li>
+          <input type="radio" th:id="'d1_' + ${status.index}" name="answer_${status.index}" th:value="${test.d1}">
+          <label th:for="'d1_' + ${status.index}" th:text="${test.d1}"></label>
+        </li>
+        <li>
+          <input type="radio" th:id="'d2_' + ${status.index}" name="answer_${status.index}" th:value="${test.d2}">
+          <label th:for="'d2_' + ${status.index}" th:text="${test.d2}"></label>
+        </li>
+        <li>
+          <input type="radio" th:id="'d3_' + ${status.index}" name="answer_${status.index}" th:value="${test.d3}">
+          <label th:for="'d3_' + ${status.index}" th:text="${test.d3}"></label>
+        </li>
+        <li>
+          <input type="radio" th:id="'d4_' + ${status.index}" name="answer_${status.index}" th:value="${test.d4}">
+          <label th:for="'d4_' + ${status.index}" th:text="${test.d4}"></label>
+        </li>
+      </ul>
+      <p><strong>답안:</strong> <span id="solution_${status.index}" th:text="${test.solution}"></span></p>
+    </li>
+  </ul>
+  <button type="button" th:onclick="'checkAnswer(' + ${status.index} + ');'" data-index="${status.index}" th:text="'확인 (' + (${status.index} + 1) + ')'"></button>
+
+</form>
 </body>
 </html>
