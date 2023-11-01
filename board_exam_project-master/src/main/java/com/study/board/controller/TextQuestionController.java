@@ -6,6 +6,10 @@ import com.study.board.entity.User;
 import com.study.board.repository.PdfRepository;
 import com.study.board.repository.QuestionRepository;
 import com.study.board.repository.UserRepository;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,14 +43,57 @@ public class TextQuestionController {
         this.questionRepository = questionRepository;
     }
 
-    @GetMapping("/display")
-    public String displayText(@RequestParam("pdfId") Integer pdfId, Model model) throws IOException {
-        // txt 파일 경로 설정
-        String txtFilePath = "./pdf/test.txt";
+    @PostMapping("/pdf/display")
+    public String displayText(@RequestParam("filePath") String filePath,@RequestParam("pdfId") Integer pdfId, Model model) throws IOException {
+
+
+        // pdf 경로를 입력 받아 불필요한 정보를 제거
+        String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
+
+        //
+        PDDocument document = null;
+        String path =filePath; // PDF file path
+        String outputFilePath = "C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
+
+        try {
+            document = PDDocument.load(new File(path)); // load PDF file
+            PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
+            int numPages = document.getNumberOfPages(); // check the number of pages
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // text file writer
+
+            writer.write("Number of pages: " + numPages + "\n"); // write page count to file
+
+            JSONArray jsonArray = new JSONArray(); // create JSONArray for all pages
+
+            for (int pageNum = 1; pageNum <= numPages; pageNum++) {
+                stripper.setStartPage(pageNum); // set start page
+                stripper.setEndPage(pageNum); // set end page
+                String pageText = stripper.getText(document); // extract text from page
+
+                writer.write("Processed text from page " + pageNum + ":\n"); // write the page numbers to the file
+                writer.write(pageText); // Write the processed text to a file
+                writer.write("\nOriginal text:\n"); // write original text to file
+                writer.write(pageText); // write original text to file
+                writer.write("\n");
+
+                // create JSON object for the page
+                JSONObject pageJson = new JSONObject();
+                pageJson.put("text", pageText);
+
+                // Add the JSON object to the JSONArray
+                jsonArray.put(pageJson);
+            }
+            writer.close();
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        //
+
 
         // txt 파일 읽기
-        Path path = Paths.get(txtFilePath);
-        String content = new String(Files.readAllBytes(path));
+        Path pathread= Paths.get(outputFilePath);
+        String content = new String(Files.readAllBytes(pathread));
 
         // 페이지 수 계산
         int numberOfPages = content.split("Processed text from page \\d+:").length;
@@ -52,10 +102,11 @@ public class TextQuestionController {
         String[] pageTexts = content.split("Processed text from page \\d+:");
 
         // 모델에 데이터 추가
-        model.addAttribute("pdfId", pdfId);
         model.addAttribute("pageTexts", pageTexts);
         model.addAttribute("numberOfPages", numberOfPages);
 
+        model.addAttribute("pdfname", modifiedFilePath);
+        model.addAttribute("pdfId", pdfId);
         return "pdf/createquestion";
     }
 
