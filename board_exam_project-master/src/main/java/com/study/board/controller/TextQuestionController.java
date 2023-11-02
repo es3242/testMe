@@ -46,14 +46,12 @@ public class TextQuestionController {
 
     @PostMapping("/pdf/display")
     public String displayText(@RequestParam("filePath") String filePath,@RequestParam("pdfId") Integer pdfId, Model model) throws IOException {
-
-
         // pdf 경로를 입력 받아 불필요한 정보를 제거
         String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
 
         //
         PDDocument document = null;
-        String path =filePath; // PDF file path
+        String path = "./pdf/" + filePath; // PDF file path
         String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
 
         try {

@@ -4,13 +4,34 @@
     <meta charset="UTF-8">
     <title>PDF 텍스트 추출</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+        }
+
         .test {
+            margin: 0 auto;
             margin-bottom: 20px;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .test-header {
-            font-size: 18px;
+            font-size: 23px;
             font-weight: bold;
+            color: #007BFF;
         }
 
         .test-content {
@@ -20,8 +41,13 @@
         }
 
         .test-content ul {
-            margin-left: 20px;
+            margin-left: 10px;
             list-style-type: square;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
         }
 
         .test-answer {
@@ -33,14 +59,28 @@
         .answer-input {
             margin-top: 10px;
         }
+
+        .check-answer-button {
+            margin-top: 15px;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .check-answer-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-<h1>PDF 텍스트 추출</h1>
+<h1>빈칸 문제 출제</h1>
 <p>페이지 수: <span th:text="${questionsAmount}"></span></p>
 
 <div th:each="test, index : ${tests}" class="test">
-    <hr/>
+<!--    <hr/>-->
     <div class="test-header">
         테스트 <span th:text="${index.index + 1}"></span>
     </div>
@@ -54,7 +94,8 @@
         <span th:text="${solutions[__${index.index}__]}" th:attr="data-correct-answer=${solutions[__${index.index}__]}" th:id="'correctAnswer__' + ${index.index}"></span>
     </div>
     <div class="answer-input">
-        답변: <input type="text" th:id="'answerInput__' + ${index.index}" onkeypress="if(event.keyCode==13) { checkAnswer(${index.index}); return false; }">
+        <strong>답변:</strong> <input type="text" th:id="'answerInput__' + ${index.index}" onkeypress="if(event.keyCode==13) { checkAnswer(${index.index}); return false; }">
+        <br />
         <button class="check-answer-button" th:attr="data-index=${index.index}">정답 확인</button>
         <p th:id="'result__' + ${index.index}"></p>
     </div>
