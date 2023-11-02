@@ -6,6 +6,7 @@ import com.study.board.entity.User;
 import com.study.board.repository.PdfRepository;
 import com.study.board.repository.QuestionRepository;
 import com.study.board.repository.UserRepository;
+import com.study.board.service.UserService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -29,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class TextQuestionController {
@@ -38,6 +40,9 @@ public class TextQuestionController {
     private final QuestionRepository questionRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public TextQuestionController(PdfRepository pdfRepository, UserRepository userRepository, QuestionRepository questionRepository) {
         this.pdfRepository = pdfRepository;
         this.userRepository = userRepository;
@@ -45,68 +50,82 @@ public class TextQuestionController {
     }
 
     @PostMapping("/pdf/display")
-    public String displayText(@RequestParam("filePath") String filePath,@RequestParam("pdfId") Integer pdfId, Model model) throws IOException {
-        // pdf 경로를 입력 받아 불필요한 정보를 제거
-        String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
+    public String displayText(@RequestParam("filePath") String filePath,@RequestParam("pdfId") Integer pdfId, Model model, HttpSession session) throws IOException {
+        Object obj = session.getAttribute("user");
+        System.out.println(obj);
+        if (obj == null) {
+            return "user/mypage";
+        } else {
+            Long userId = Long.parseLong(obj.toString());
+            System.out.println(userId);
 
-        //
-        PDDocument document = null;
-        String path = "./pdf/" + filePath; // PDF file path
-        String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
+            User user = userService.getUserInfo(userId);
+            System.out.println(user);
 
-        try {
-            document = PDDocument.load(new File(path)); // load PDF file
-            PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
-            int numPages = document.getNumberOfPages(); // check the number of pages
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // text file writer
+            model.addAttribute("user", user);
 
-            writer.write("Number of pages: " + numPages + "\n"); // write page count to file
+            // pdf 경로를 입력 받아 불필요한 정보를 제거
+            String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
 
-            JSONArray jsonArray = new JSONArray(); // create JSONArray for all pages
+            //
+            PDDocument document = null;
+            String path = "./pdf/" + filePath; // PDF file path
+            String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
 
-            for (int pageNum = 1; pageNum <= numPages; pageNum++) {
-                stripper.setStartPage(pageNum); // set start page
-                stripper.setEndPage(pageNum); // set end page
-                String pageText = stripper.getText(document); // extract text from page
+            try {
+                document = PDDocument.load(new File(path)); // load PDF file
+                PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
+                int numPages = document.getNumberOfPages(); // check the number of pages
+                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // text file writer
 
-                writer.write("Processed text from page " + pageNum + ":\n"); // write the page numbers to the file
-                writer.write(pageText); // Write the processed text to a file
-                writer.write("\nOriginal text:\n"); // write original text to file
-                writer.write(pageText); // write original text to file
-                writer.write("\n");
+                writer.write("Number of pages: " + numPages + "\n"); // write page count to file
 
-                // create JSON object for the page
-                JSONObject pageJson = new JSONObject();
-                pageJson.put("text", pageText);
+                JSONArray jsonArray = new JSONArray(); // create JSONArray for all pages
 
-                // Add the JSON object to the JSONArray
-                jsonArray.put(pageJson);
+                for (int pageNum = 1; pageNum <= numPages; pageNum++) {
+                    stripper.setStartPage(pageNum); // set start page
+                    stripper.setEndPage(pageNum); // set end page
+                    String pageText = stripper.getText(document); // extract text from page
+
+                    writer.write("Processed text from page " + pageNum + ":\n"); // write the page numbers to the file
+                    writer.write(pageText); // Write the processed text to a file
+                    writer.write("\nOriginal text:\n"); // write original text to file
+                    writer.write(pageText); // write original text to file
+                    writer.write("\n");
+
+                    // create JSON object for the page
+                    JSONObject pageJson = new JSONObject();
+                    pageJson.put("text", pageText);
+
+                    // Add the JSON object to the JSONArray
+                    jsonArray.put(pageJson);
+                }
+                writer.close();
+
+            }catch (IOException e) {
+                e.printStackTrace();
             }
-            writer.close();
+            //
 
-        }catch (IOException e) {
-            e.printStackTrace();
+
+            // txt 파일 읽기
+            Path pathread= Paths.get(outputFilePath);
+            String content = new String(Files.readAllBytes(pathread));
+
+            // 페이지 수 계산
+            int numberOfPages = content.split("Processed text from page \\d+:").length;
+
+            // 페이지별 텍스트 분리
+            String[] pageTexts = content.split("Processed text from page \\d+:");
+
+            // 모델에 데이터 추가
+            model.addAttribute("pageTexts", pageTexts);
+            model.addAttribute("numberOfPages", numberOfPages);
+
+            model.addAttribute("pdfname", modifiedFilePath);
+            model.addAttribute("pdfId", pdfId);
+            return "pdf/createquestion";
         }
-        //
-
-
-        // txt 파일 읽기
-        Path pathread= Paths.get(outputFilePath);
-        String content = new String(Files.readAllBytes(pathread));
-
-        // 페이지 수 계산
-        int numberOfPages = content.split("Processed text from page \\d+:").length;
-
-        // 페이지별 텍스트 분리
-        String[] pageTexts = content.split("Processed text from page \\d+:");
-
-        // 모델에 데이터 추가
-        model.addAttribute("pageTexts", pageTexts);
-        model.addAttribute("numberOfPages", numberOfPages);
-
-        model.addAttribute("pdfname", modifiedFilePath);
-        model.addAttribute("pdfId", pdfId);
-        return "pdf/createquestion";
     }
 
     @PostMapping("/display")
@@ -141,9 +160,23 @@ public class TextQuestionController {
 
 
     @GetMapping("/display/{pdfId}/{userId}/questions")
-    public String getSavedQuestions(@PathVariable("pdfId") Integer pdfId, @PathVariable("userId") Long userId, Model model) {
-        List<Question> savedQuestions = questionRepository.findByPdfPdfIdAndUserId(pdfId, userId);
-        model.addAttribute("questions", savedQuestions);
-        return "pdf/questionshow";
+    public String getSavedQuestions(@PathVariable("pdfId") Integer pdfId, @PathVariable("userId") Long userId, Model model, HttpSession session) {
+        Object obj = session.getAttribute("user");
+        System.out.println(obj);
+        if (obj == null) {
+            return "user/mypage";
+        } else {
+            // Long userId = Long.parseLong(obj.toString());
+            System.out.println(userId);
+
+            User user = userService.getUserInfo(userId);
+            System.out.println(user);
+
+            model.addAttribute("user", user);
+
+            List<Question> savedQuestions = questionRepository.findByPdfPdfIdAndUserId(pdfId, userId);
+            model.addAttribute("questions", savedQuestions);
+            return "pdf/questionshow";
+        }
     }
 }
