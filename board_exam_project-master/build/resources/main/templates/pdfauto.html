@@ -1,74 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Questions View</title>
-  <style>
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .contact-us {
-      height: auto;
-      display: flex;
-      align-items: center;
-    }
-
-    h1 {
-      text-align: center;
-      background-color: #007BFF;
-      color: white;
-      padding: 10px;
-    }
-
-    .test {
-      margin: 0 auto;
-      margin-bottom: 20px;
-      max-width: 600px;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-      color: #007BFF;
-    }
-
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    li {
-      margin-bottom: 20px;
-    }
-
-    input[type="radio"] {
-      margin-right: 10px;
-      vertical-align: middle; /* <label>과 <input> 요소를 수직 정렬 */
-    }
-
-    label {
-      vertical-align: middle; /* <label> 요소를 <input> 요소와 수직 정렬 */
-    }
-
-    button {
-      background-color: #007BFF;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-  </style>
+  <meta charset="UTF-8">
+  <title>PDF Auto</title>
   <script>
     function checkAnswer(index) {
       var selectedAnswer = document.querySelector('input[name="answer_' + index + '"]:checked');
@@ -104,27 +38,34 @@
   </script>
 </head>
 <body>
-<!-- Sub Header -->
-<div class="sub-header">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-sm-8">
-        <div class="left-content">
-        </div>
-      </div>
-      <div class="col-lg-4 col-sm-4">
-        <div class="right-icons">
-          <ul>
-            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fa fa-behance"></i></a></li>
-            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<h1>PDF Auto</h1>
+<form th:each="test, status : ${tests}" th:id="'form_' + ${status.index}">
+  <p>테스트 결과:</p>
+  <ul>
+    <li>
+      <h2 th:text="${test.question}"></h2>
+      <ul>
+        <li>
+          <input type="radio" th:id="'d1_' + ${status.index}" name="answer_${status.index}" th:value="${test.d1}">
+          <label th:for="'d1_' + ${status.index}" th:text="${test.d1}"></label>
+        </li>
+        <li>
+          <input type="radio" th:id="'d2_' + ${status.index}" name="answer_${status.index}" th:value="${test.d2}">
+          <label th:for="'d2_' + ${status.index}" th:text="${test.d2}"></label>
+        </li>
+        <li>
+          <input type="radio" th:id="'d3_' + ${status.index}" name="answer_${status.index}" th:value="${test.d3}">
+          <label th:for="'d3_' + ${status.index}" th:text="${test.d3}"></label>
+        </li>
+        <li>
+          <input type="radio" th:id="'d4_' + ${status.index}" name="answer_${status.index}" th:value="${test.d4}">
+          <label th:for="'d4_' + ${status.index}" th:text="${test.d4}"></label>
+        </li>
+      </ul>
+      <p><strong>답안:</strong> <span id="solution_${status.index}" th:text="${test.solution}"></span></p>
+    </li>
+  </ul>
+  <button type="button" th:onclick="'checkAnswer(' + ${status.index} + ');'" data-index="${status.index}" th:text="'확인 (' + (${status.index} + 1) + ')'"></button>
 
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">

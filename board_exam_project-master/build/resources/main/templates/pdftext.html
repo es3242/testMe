@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>PDF Text Extraction</title>
+    <title>PDF 텍스트 추출</title>
     <style>
         .test {
             margin-bottom: 20px;
@@ -27,17 +27,22 @@
         .test-answer {
             margin-top: 10px;
             font-style: italic;
+            display: none;
+        }
+
+        .answer-input {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-<h1>PDF Text Extraction</h1>
-<p>Number of pages: <span th:text="${questionsAmount}"></span></p>
+<h1>PDF 텍스트 추출</h1>
+<p>페이지 수: <span th:text="${questionsAmount}"></span></p>
 
 <div th:each="test, index : ${tests}" class="test">
     <hr/>
     <div class="test-header">
-        Test <span th:text="${index.index + 1}"></span>
+        테스트 <span th:text="${index.index + 1}"></span>
     </div>
     <div class="test-content">
         <ul>
@@ -117,6 +122,39 @@
             </div>
         </div>
     </div>
+    <div class="answer-input">
+        답변: <input type="text" th:id="'answerInput__' + ${index.index}" onkeypress="if(event.keyCode==13) { checkAnswer(${index.index}); return false; }">
+        <button class="check-answer-button" th:attr="data-index=${index.index}">정답 확인</button>
+        <p th:id="'result__' + ${index.index}"></p>
+    </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function checkAnswer(index) {
+            var userAnswer = document.getElementById("answerInput__" + index).value;
+            var correctAnswer = document.getElementById("correctAnswer__" + index).getAttribute("data-correct-answer");
+            var resultElement = document.getElementById("result__" + index);
+
+            if (userAnswer === correctAnswer) {
+                resultElement.textContent = "정답!";
+                resultElement.style.color = "green";
+            } else {
+                resultElement.textContent = "틀렸습니다. 다시 시도하세요.";
+                resultElement.style.color = "red";
+            }
+        }
+
+        // 버튼에 대한 이벤트 리스너 추가
+        var buttons = document.querySelectorAll(".check-answer-button");
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var index = button.getAttribute("data-index");
+                checkAnswer(index);
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
