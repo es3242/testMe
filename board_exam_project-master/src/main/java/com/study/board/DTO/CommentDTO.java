@@ -1,6 +1,10 @@
+// CommentDTO.java
 package com.study.board.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.study.board.entity.User;
+
+import java.time.LocalDateTime;
 
 public class CommentDTO {
     @JsonProperty("id")
@@ -8,14 +12,48 @@ public class CommentDTO {
 
     @JsonProperty("content")
     private String content;
-    // 다른 필요한 필드들
 
-    public CommentDTO(Long id, String content) {
+    private User user;
+
+    private LocalDateTime createAt; // LocalDateTime 필드 추가
+
+    public CommentDTO(Long id, String content, User user, LocalDateTime createAt) {
         this.id = id;
         this.content = content;
-        // 필요한 필드들 설정
+        this.user = user;
+        this.createAt = createAt;
     }
 
-    // Getter, Setter 등 필요한 메서드들
-}
+    // Getter 및 Setter 메서드
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createAt) {
+        this.createAt = createAt;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+}

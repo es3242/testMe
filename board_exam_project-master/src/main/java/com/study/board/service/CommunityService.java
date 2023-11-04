@@ -40,6 +40,10 @@ public class CommunityService {
         return communityRepository.findDeletedCommunities();
     }
 
+    public List<Community> getDeletedCommunitiesByUser(User user) {
+        return communityRepository.findDeletedCommunitiesByUser(user);
+    }
+
     public Optional<Community> getCommunityById(long id) {
         return communityRepository.findById(id);
     }
