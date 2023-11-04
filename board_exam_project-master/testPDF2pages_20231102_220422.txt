@@ -1,5 +1,5 @@
-페이지 수: 2
-페이지 1에서 처리된 텍스트:
+Number of pages: 2
+Processed text from page 1:
 4
 1. 산술논리연산장치(The Arithmetic and Logic Unit, ALU)
 중앙처리장치(CPU)의 구성
@@ -10,7 +10,7 @@
  제어 장치
 CPU의구성요소
 
-페이지 2에서 처리된 텍스트:
+Processed text from page 2:
 5
 ALU 내부 구성 요소
 산술 연산장치
