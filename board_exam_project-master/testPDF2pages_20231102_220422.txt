@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 Number of pages: 2
 Processed text from page 1:
+=======
+페이지 수: 2
+페이지 1에서 처리된 텍스트:
+>>>>>>> parent of 40d5f39 (Revert "Merge branch 'main' of https://github.com/es3242/testMe")
 4
 1. 산술논리연산장치(The Arithmetic and Logic Unit, ALU)
 중앙처리장치(CPU)의 구성
@@ -10,7 +15,11 @@ Processed text from page 1:
  제어 장치
 CPU의구성요소
 
+<<<<<<< HEAD
 Processed text from page 2:
+=======
+페이지 2에서 처리된 텍스트:
+>>>>>>> parent of 40d5f39 (Revert "Merge branch 'main' of https://github.com/es3242/testMe")
 5
 ALU 내부 구성 요소
 산술 연산장치
