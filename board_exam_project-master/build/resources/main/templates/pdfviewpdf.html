@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #pdf-container {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    #pdf-container iframe {
+      flex: 1;
+      height: 100%;
+      border: none;
+    }
+    .input-container {
+      flex: 1;
+      height: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .input-container input[type="text"] {
+      width: 100%;
+      height: 100%;
+      resize: vertical;
+      margin-bottom: 10px;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<div id="pdf-container">
+  <iframe src="/pdf/test3.pdf#toolbar=0&navpanes=0&scrollbar=0" scrolling="no"></iframe>
+  <div class="input-container">
+    <div id="text-container">
+      <textarea placeholder="Enter text here..."></textarea>
+    </div>
+    <button onclick="addTextInput()">Add Text Input</button>
+  </div>
+</div>
+
+<script>
+  function addTextInput() {
+    var textContainer = document.getElementById('text-container');
+    var textarea = document.createElement('textarea');
+    textarea.placeholder = 'Enter text here...';
+    textarea.style.width = '100%';
+    textarea.style.height = '100%';
+    textarea.style.resize = 'vertical';
+    textarea.style.marginBottom = '10px';
+    textarea.style.padding = '5px';
+    textarea.style.boxSizing = 'border-box';
+    textContainer.appendChild(textarea);
+  }
+</script>
+
+</body>
+</html>

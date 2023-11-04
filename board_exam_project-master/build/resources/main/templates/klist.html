@@ -127,9 +127,24 @@ body {
                   </div>
                   <div class="row">
                       <div class="col-lg-12" style="overflow-y: scroll; max-height: 400px;">
+
+
+                          <form action="/search" method="get">
+                              <div class="input-group mb-3">
+                                  <input type="text" class="form-control" placeholder="Search" name="query">
+                                  <div class="input-group-append">
+                                      <button class="btn btn-primary" type="submit">Search</button>
+                                  </div>
+                              </div>
+                          </form>
+
+
                           <form id="contact" action="/login" method="post">
                               <div class="row">
                                   <div class="col-lg-12">
+
+
+
                                       <table class="table table-striped">
                                           <thead>
                                           <tr>
@@ -164,11 +179,6 @@ body {
 
                                           </tbody>
                                       </table>
-
-
-
-
-
                                   </div>
                               </div>
                           </form>
