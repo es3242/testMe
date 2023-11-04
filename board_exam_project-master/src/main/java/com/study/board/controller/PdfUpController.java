@@ -3,12 +3,9 @@ package com.study.board.controller;
 import com.study.board.entity.Pdf;
 import com.study.board.entity.User;
 import com.study.board.repository.PdfRepository;
-import com.study.board.repository.UserRepository;
 import com.study.board.service.PdfService;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -118,6 +113,15 @@ public class PdfUpController {
 
         model.addAttribute("pdfList", pdfList);
         return "kpdflist";
+    }
+
+    @GetMapping(value = "/pdflist", produces = MediaType.APPLICATION_JSON_VALUE) // JSON
+    public ResponseEntity<List<Pdf>> getPdfList(HttpSession session) {
+        Long userId = (Long) session.getAttribute("user");
+        List<Pdf> pdfList = pdfService.getPdfListByUserId(userId);
+        System.out.println("PDF 목록 뽑아보기");
+        System.out.println(pdfList);
+        return ResponseEntity.ok().body(pdfList);
     }
 
 

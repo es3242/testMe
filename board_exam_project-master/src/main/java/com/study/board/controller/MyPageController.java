@@ -55,5 +55,30 @@ public class MyPageController {
                     //ResponseEntity.ok().body(response);
         }
     }
+
+    @GetMapping("/mypage2")
+    public ResponseEntity<Map<String, Object>> mypage2(HttpSession session) {
+        Object obj = session.getAttribute("user");
+        System.out.println(obj);
+
+        if (obj == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            Long userId = Long.parseLong(obj.toString());
+            System.out.println(userId);
+
+            User user = userService.getUserInfo(userId);
+            System.out.println(user);
+
+            List<Freeboard> userFreeboards = freeboardService.getContentByUserId(userId);
+            System.out.println(userFreeboards);
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("user", user);
+            responseBody.put("userFreeboard", userFreeboards);
+
+            return ResponseEntity.ok(responseBody);
+        }
+    }
 }
 

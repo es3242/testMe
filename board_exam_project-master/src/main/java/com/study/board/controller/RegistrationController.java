@@ -4,6 +4,8 @@ import com.study.board.entity.Freeboard;
 import com.study.board.entity.User;
 import com.study.board.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +35,13 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") User user, Model model) {
+    public ResponseEntity<String> register(@ModelAttribute("user") User user) {
 
         userService.register(user);
+        System.out.println("Registered!");
+        System.out.println(user.getNickname());
 
-        return "index02";
+        // return "index02";
+        return new ResponseEntity<>("회원가입이 완료되었습니다!", HttpStatus.OK);
     }
-
-
 }
