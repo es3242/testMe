@@ -2,32 +2,23 @@ package com.study.board.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.board.entity.Community;
-import com.study.board.entity.User;
 import com.study.board.service.PdfService;
-import com.study.board.service.UserService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 
 @Controller
@@ -36,125 +27,106 @@ public class PdftextController {
     @Autowired
     private PdfService pdfService;
 
-    @Autowired
-    private UserService userService;
+    @GetMapping("/pdftext")
+    public String pdftext(Model model) {
+        Random random = new Random();
+        PDDocument document = null;
+        String relativePath = ""; // Absolute path
+        String path = "C:/asdasd/test3.pdf"; // PDF file path
+        String outputFilePath = "C:/asdasd/test3.txt"; // output text file path
 
+        try {
+            document = PDDocument.load(new File(path)); // load PDF file
+            PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
+            int numPages = document.getNumberOfPages(); // check the number of pages
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // text file writer
 
-    @PostMapping("/pdf/text")
-    public String pdftext(@RequestParam("filePath") String filePath, Model model, HttpSession session) {
-        Object obj = session.getAttribute("user");
-        System.out.println(obj);
-        if (obj == null) {
-            return "user/mypage";
-        } else {
-            Long userId = Long.parseLong(obj.toString());
-            System.out.println(userId);
+            writer.write("Number of pages: " + numPages + "\n"); // write page count to file
 
-            User user = userService.getUserInfo(userId);
-            System.out.println(user);
+            JSONArray jsonArray = new JSONArray(); // create JSONArray for all pages
 
-            model.addAttribute("user", user);
+            for (int pageNum = 1; pageNum <= numPages; pageNum++) {
+                stripper.setStartPage(pageNum); // set start page
+                stripper.setEndPage(pageNum); // set end page
+                String pageText = stripper.getText(document); // extract text from page
 
-            String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
+                writer.write("Processed text from page " + pageNum + ":\n"); // write the page numbers to the file
+                writer.write(pageText); // Write the processed text to a file
+                writer.write("\nOriginal text:\n"); // write original text to file
+                writer.write(pageText); // write original text to file
+                writer.write("\n");
 
-            Random random = new Random();
-            PDDocument document = null;
-            String path = "./pdf/" + filePath; // PDF file path
-            String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
-            System.out.println(path);
+                // create JSON object for the page
+                JSONObject pageJson = new JSONObject();
+                pageJson.put("text", pageText);
+
+                // Add the JSON object to the JSONArray
+                jsonArray.put(pageJson);
+            }
+            writer.close();
+
             try {
-                document = PDDocument.load(new File(path)); // load PDF file
-                PDFTextStripper stripper = new PDFTextStripper(); // PDF text extractor
-                int numPages = document.getNumberOfPages(); // check the number of pages
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // text file writer
+                // set up HTTP connection
+                URL url = new URL("http://localhost:5000/endpoint");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); // 인코딩 명시
+                connection.setDoOutput(true);
 
-                writer.write("Number of pages: " + numPages + "\n"); // write page count to file
+                // Write JSON data to the connection's output stream
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter httpWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+                httpWriter.write(jsonArray.toString());
+                httpWriter.flush();
+                httpWriter.close();
 
-                JSONArray jsonArray = new JSONArray(); // create JSONArray for all pages
+                // 로그로 JSON 데이터 확인
+                System.out.println("Sent JSON data to Flask server:");
+                System.out.println(jsonArray.toString());
 
-                for (int pageNum = 1; pageNum <= numPages; pageNum++) {
-                    stripper.setStartPage(pageNum); // set start page
-                    stripper.setEndPage(pageNum); // set end page
-                    String pageText = stripper.getText(document); // extract text from page
+                // read response from server
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // request processed successfully
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                    String response = reader.readLine();
+                    reader.close();
+                    System.out.println("Server response: " + response);
 
-                    writer.write("Processed text from page " + pageNum + ":\n"); // write the page numbers to the file
-                    writer.write(pageText); // Write the processed text to a file
-                /*writer.write("\nOriginal text:\n"); // write original text to file
-                writer.write(pageText); // write original text to file*/
-                    writer.write("\n");
+                    // Parse the response JSON
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Map<String, Object> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {});
+                    List<String> testList = (List<String>) responseMap.get("Test");
+                    List<String> solutionsList = (List<String>) responseMap.get("Solutions");
+                    int questionsAmount = (int) responseMap.get("Questions Amount");
 
-                    // create JSON object for the page
-                    JSONObject pageJson = new JSONObject();
-                    pageJson.put("text", pageText);
+                    // Add the lists and other data to the model
+                    model.addAttribute("tests", testList);
+                    model.addAttribute("solutions", solutionsList);
+                    model.addAttribute("questionsAmount", questionsAmount);
 
-                    // Add the JSON object to the JSONArray
-                    jsonArray.put(pageJson);
+                } else {
+                    // handle error response
+                    System.out.println("Error response from server. Response Code: " + responseCode);
                 }
-                writer.close();
 
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (document != null) {
                 try {
-                    // set up HTTP connection
-                    URL url = new URL("http://localhost:5000/endpoint");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); // 인코딩 명시
-                    connection.setDoOutput(true);
-
-                    // Write JSON data to the connection's output stream
-                    OutputStream outputStream = connection.getOutputStream();
-                    BufferedWriter httpWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-                    httpWriter.write(jsonArray.toString());
-                    httpWriter.flush();
-                    httpWriter.close();
-
-                    // 로그로 JSON 데이터 확인
-                    System.out.println("Sent JSON data to Flask server:");
-                    System.out.println(jsonArray.toString());
-
-                    // read response from server
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // request processed successfully
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-                        String response = reader.readLine();
-                        reader.close();
-                        System.out.println("Server response: " + response);
-
-                        // Parse the response JSON
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        Map<String, Object> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {});
-                        List<String> testList = (List<String>) responseMap.get("Test");
-                        List<String> solutionsList = (List<String>) responseMap.get("Solutions");
-                        int questionsAmount = (int) responseMap.get("Questions Amount");
-
-                        // Add the lists and other data to the model
-                        model.addAttribute("tests", testList);
-                        model.addAttribute("solutions", solutionsList);
-                        model.addAttribute("questionsAmount", questionsAmount);
-
-                    } else {
-                        // handle error response
-                        System.out.println("Error response from server. Response Code: " + responseCode);
-                    }
-
-                    connection.disconnect();
+                    document.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (document != null) {
-                    try {
-                        document.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
-
-            return "pdftext";
         }
+
+        return "pdftext";
     }
 
     @GetMapping("/pdfviewjpg")
@@ -167,115 +139,99 @@ public class PdftextController {
         return "pdfviewpdf";
     }
 
+    @GetMapping("/pdfauto")
+    public String pdfauto(Model model) {
+        PDDocument document = null;
+        String path = "C:/asdasd/test3.pdf"; // PDF 파일 경로
+        String outputFilePath = "C:/asdasd/test3.txt"; // 출력 텍스트 파일 경로
 
+        try {
+            document = PDDocument.load(new File(path)); // PDF 파일 로드
+            PDFTextStripper stripper = new PDFTextStripper(); // PDF 텍스트 추출기
+            int numPages = document.getNumberOfPages(); // 페이지 수 확인
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // 텍스트 파일 작성기
 
-    @PostMapping("/pdf/pdfauto")
-    public String pdfauto(@RequestParam("filePath") String filePath, Model model, HttpSession session) {
-        Object obj = session.getAttribute("user");
-        System.out.println(obj);
-        if (obj == null) {
-            return "user/mypage";
-        } else {
-            Long userId = Long.parseLong(obj.toString());
-            System.out.println(userId);
+            writer.write("페이지 수: " + numPages + "\n"); // 파일에 페이지 수 작성
 
-            User user = userService.getUserInfo(userId);
-            System.out.println(user);
+            JSONArray jsonArray = new JSONArray(); // 모든 페이지를 위한 JSONArray 생성
 
-            model.addAttribute("user", user);
+            for (int pageNum = 1; pageNum <= numPages; pageNum++) {
+                stripper.setStartPage(pageNum); // 시작 페이지 설정
+                stripper.setEndPage(pageNum); // 종료 페이지 설정
+                String pageText = stripper.getText(document); // 페이지에서 텍스트 추출
 
-            String modifiedFilePath = filePath.replace(".\\pdf\\", "").replaceAll("\\.pdf$", "");
+                writer.write("페이지 " + pageNum + "에서 처리된 텍스트:\n"); // 파일에 페이지 번호 작성
+                writer.write(pageText); // 처리된 텍스트를 파일에 작성
+                writer.write("\n");
 
-            Random random = new Random();
-            PDDocument document = null;
-            String path = "./pdf/" + filePath; // PDF file path
-            String outputFilePath = modifiedFilePath+".txt";//"C:/asdasd/"+modifiedFilePath+".txt"; // output text file path
+                // 페이지용 JSON 객체 생성
+                JSONObject pageJson = new JSONObject();
+                pageJson.put("text", pageText);
+
+                // JSON 객체를 JSONArray에 추가
+                jsonArray.put(pageJson);
+            }
+            writer.close();
 
             try {
-                document = PDDocument.load(new File(path)); // PDF 파일 로드
-                PDFTextStripper stripper = new PDFTextStripper(); // PDF 텍스트 추출기
-                int numPages = document.getNumberOfPages(); // 페이지 수 확인
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath)); // 텍스트 파일 작성기
+                // set up HTTP connection
+                URL url = new URL("http://localhost:5000/endtest");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); // 인코딩 명시
+                connection.setDoOutput(true);
 
-                writer.write("페이지 수: " + numPages + "\n"); // 파일에 페이지 수 작성
+                // Write JSON data to the connection's output stream
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter httpWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+                httpWriter.write(jsonArray.toString());
+                httpWriter.flush();
+                httpWriter.close();
 
-                JSONArray jsonArray = new JSONArray(); // 모든 페이지를 위한 JSONArray 생성
+                // 로그로 JSON 데이터 확인
+                System.out.println("Sent JSON data to Flask server:");
+                System.out.println(jsonArray.toString());
 
-                for (int pageNum = 1; pageNum <= numPages; pageNum++) {
-                    stripper.setStartPage(pageNum); // 시작 페이지 설정
-                    stripper.setEndPage(pageNum); // 종료 페이지 설정
-                    String pageText = stripper.getText(document); // 페이지에서 텍스트 추출
+                // read response from server
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // request processed successfully
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                    String response = reader.readLine();
+                    reader.close();
+                    System.out.println("Server response: " + response);
 
-                    writer.write("페이지 " + pageNum + "에서 처리된 텍스트:\n"); // 파일에 페이지 번호 작성
-                    writer.write(pageText); // 처리된 텍스트를 파일에 작성
-                    writer.write("\n");
+                    // Parse the response JSON
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Map<String, Object> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {});
+                    List<String> testList = (List<String>) responseMap.get("Test");
 
-                    // 페이지용 JSON 객체 생성
-                    JSONObject pageJson = new JSONObject();
-                    pageJson.put("text", pageText);
+                    // Add the lists and other data to the model
+                    model.addAttribute("tests", testList);
 
-                    // JSON 객체를 JSONArray에 추가
-                    jsonArray.put(pageJson);
+                } else {
+                    // handle error response
+                    System.out.println("Error response from server. Response Code: " + responseCode);
                 }
-                writer.close();
 
+                connection.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (document != null) {
                 try {
-                    // set up HTTP connection
-                    URL url = new URL("http://localhost:5000/endtest");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8"); // 인코딩 명시
-                    connection.setDoOutput(true);
-
-                    // Write JSON data to the connection's output stream
-                    OutputStream outputStream = connection.getOutputStream();
-                    BufferedWriter httpWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-                    httpWriter.write(jsonArray.toString());
-                    httpWriter.flush();
-                    httpWriter.close();
-
-                    // 로그로 JSON 데이터 확인
-                    System.out.println("Sent JSON data to Flask server:");
-                    System.out.println(jsonArray.toString());
-
-                    // read response from server
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // request processed successfully
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-                        String response = reader.readLine();
-                        reader.close();
-                        System.out.println("Server response: " + response);
-
-                        // Parse the response JSON
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        Map<String, Object> responseMap = objectMapper.readValue(response, new TypeReference<Map<String, Object>>() {});
-                        List<String> testList = (List<String>) responseMap.get("Test");
-
-                        // Add the lists and other data to the model
-                        model.addAttribute("tests", testList);
-
-                    } else {
-                        // handle error response
-                        System.out.println("Error response from server. Response Code: " + responseCode);
-                    }
-
-                    connection.disconnect();
+                    document.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (document != null) {
-                    try {
-                        document.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
-            return "pdfauto";
         }
+
+        return "pdfauto";
     }
+
+
 }

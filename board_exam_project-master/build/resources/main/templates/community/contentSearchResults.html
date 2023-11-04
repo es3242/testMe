@@ -91,8 +91,6 @@
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a href="/Kcommunity/list">자유 게시판 list</a></li>
-                        <li><a href="/StudyRoomList">스터디 룸 list</a></li>
-
                         <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/pdf">pdf리스트</a></li>
                         <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/pdf" onclick="alert('로그인이 필요합니다.'); return false;">pdf리스트</a></li>
                         <li class="has-sub" th:if="${#session != null && #session.getAttribute('user') != null}">
@@ -227,15 +225,15 @@
 <!-- ***** Main Banner Area End ***** -->
 
 <!-- Scripts -->
-<script src="../../vendor/jquery/jquery.min.js"></script>
-<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../../assets/js/isotope.min.js"></script>
-<script src="../../assets/js/owl-carousel.js"></script>
-<script src="../../assets/js/lightbox.js"></script>
-<script src="../../assets/js/tabs.js"></script>
-<script src="../../assets/js/video.js"></script>
-<script src="../../assets/js/slick-slider.js"></script>
-<script src="../../assets/js/custom.js"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/lightbox.js"></script>
+<script src="assets/js/tabs.js"></script>
+<script src="assets/js/video.js"></script>
+<script src="assets/js/slick-slider.js"></script>
+<script src="assets/js/custom.js"></script>
 <script>
         $('.nav li:first').addClass('active');
 
