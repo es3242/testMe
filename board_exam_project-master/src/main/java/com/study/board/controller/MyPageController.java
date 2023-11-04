@@ -1,9 +1,7 @@
 package com.study.board.controller;
 
-import com.study.board.entity.Community;
 import com.study.board.entity.Freeboard;
 import com.study.board.entity.User;
-import com.study.board.service.CommunityService;
 import com.study.board.service.FreeboardService;
 import com.study.board.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,6 @@ public class MyPageController {
     @Autowired
     private FreeboardService freeboardService;
 
-    @Autowired
-    private CommunityService communityService;
-
     @GetMapping("/mypage")
     public String mypage(HttpSession session, Model model) {
         Object obj = session.getAttribute("user");
@@ -44,13 +39,11 @@ public class MyPageController {
             User user = userService.getUserInfo(userId);
             System.out.println(user);
 
-            List<Community> userCommunities = communityService.getDeletedCommunitiesByUser(user);
-
-            //List<Freeboard> userFreeboards = freeboardService.getContentByUserId(userId);
-            System.out.println(userCommunities);
+            List<Freeboard> userFreeboards = freeboardService.getContentByUserId(userId);
+            System.out.println(userFreeboards);
 
             model.addAttribute("user", user);
-            model.addAttribute("userCommunities", userCommunities);
+            model.addAttribute("userFreeboard", userFreeboards);
             return "kmypage";
                     //ResponseEntity.ok().body(response);
         }

@@ -81,9 +81,7 @@ body {
                       <!-- ***** Logo End ***** -->
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
-                          <li><a href="/Kcommunity/list">자유 게시판 list</a></li>
-                          <li><a href="/StudyRoomList">스터디 룸 list</a></li>
-
+                          <li><a href="/list">자유 게시판 list</a></li>
                           <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/pdf">pdf리스트</a></li>
                           <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/pdf" onclick="alert('로그인이 필요합니다.'); return false;">pdf리스트</a></li>
                           <li class="has-sub" th:if="${#session != null && #session.getAttribute('user') != null}">
@@ -155,8 +153,6 @@ body {
                                           <tr>
                                               <th>user</th>
                                               <th>contentId</th>
-                                              <th>c_Category</th>
-                                              <th>s_Category</th>
                                               <th>Title</th>
                                               <th>Content</th>
                                               <th>Created At</th>
@@ -165,18 +161,16 @@ body {
                                           </tr>
                                           </thead>
                                           <tbody>
-                                          <tr th:each="community : ${userCommunities}"> <!--컨트롤러에서 받은 Freeboard 타입의 리스트(현재 접속한 user id로 작성된 글들)를 받아서 데이터를 표형식으로 출력한다.-->
-                                              <td th:text="${community.user.id}"></td>
-                                              <td th:text="${community.id}"></td>
-                                              <td th:text="${community.cCategory}"></td>
-                                              <td th:text="${community.sCategory}"></td>
-                                              <td th:text="${community.title}"></td>
-                                              <td th:text="${community.content}"></td>
-                                              <td th:text="${community.createAt}"></td>
-                                              <td th:text="${community.updateAt}"></td>
+                                          <tr th:each="freeboard : ${userFreeboard}"> <!--컨트롤러에서 받은 Freeboard 타입의 리스트(현재 접속한 user id로 작성된 글들)를 받아서 데이터를 표형식으로 출력한다.-->
+                                              <td th:text="${freeboard.user.id}"></td>
+                                              <td th:text="${freeboard.contentId}"></td>
+                                              <td th:text="${freeboard.title}"></td>
+                                              <td th:text="${freeboard.content}"></td>
+                                              <td th:text="${freeboard.contentAt}"></td>
+                                              <td th:text="${freeboard.updatedAt}"></td>
                                               <td>
-                                                  <!--<a th:href="@{/edit/{id}(id=${community.id})}">Edit</a>-->
-                                                  <a th:href="@{/Kcommunity/delete/{id}(id=${community.id})}">Delete</a>
+                                                  <a th:href="@{/edit/{id}(id=${freeboard.contentId})}">Edit</a>
+                                                  <a th:href="@{/delete/{id}(id=${freeboard.contentId})}">Delete</a>
                                               </td>
                                           </tr>
                                           </tbody>
@@ -202,12 +196,15 @@ body {
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+
   <script src="assets/js/isotope.min.js"></script>
   <script src="assets/js/owl-carousel.js"></script>
   <script src="assets/js/lightbox.js"></script>
   <script src="assets/js/tabs.js"></script>
+
   <script src="assets/js/video.js"></script>
   <script src="assets/js/slick-slider.js"></script>
+
   <script src="assets/js/custom.js"></script>
     <script>
         //according to loftblog tut

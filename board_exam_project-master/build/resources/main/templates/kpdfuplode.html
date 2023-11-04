@@ -83,9 +83,7 @@ body {
                       <!-- ***** Logo End ***** -->
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
-                          <li><a href="/Kcommunity/list">자유 게시판 list</a></li>
-                          <li><a href="/StudyRoomList">스터디 룸 list</a></li>
-
+                          <li><a href="/list">자유 게시판 list</a></li>
                           <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/pdf">pdf리스트</a></li>
                           <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/pdf" onclick="alert('로그인이 필요합니다.'); return false;">pdf리스트</a></li>
                           <li class="has-sub" th:if="${#session != null && #session.getAttribute('user') != null}">

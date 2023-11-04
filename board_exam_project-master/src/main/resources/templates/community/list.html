@@ -91,8 +91,6 @@
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a href="/Kcommunity/list">자유 게시판 list</a></li>
-                        <li><a href="/StudyRoomList">스터디 룸 list</a></li>
-
                         <li th:if="${#session != null && #session.getAttribute('user') != null}"><a href="/pdf">pdf리스트</a></li>
                         <li th:if="${#session == null || #session.getAttribute('user') == null}"><a href="/pdf" onclick="alert('로그인이 필요합니다.'); return false;">pdf리스트</a></li>
                         <li class="has-sub" th:if="${#session != null && #session.getAttribute('user') != null}">
@@ -134,9 +132,9 @@
             <div class="section-heading text-center" style="display: flex; align-items: center; justify-content: space-between;">
                 <h2 class="section-heading" style="display: flex; align-items: center; justify-content: space-between;">
                     <span style="margin-right: 20px; font-size: 36px;">자유 게시판</span>
-                    <!--<span style="margin-right: 10px; font-size: 18px;"><a href="/your-page-url-1">버튼 1</a></span>
+                    <span style="margin-right: 10px; font-size: 18px;"><a href="/your-page-url-1">버튼 1</a></span>
                     <span style="margin-right: 10px; font-size: 18px;"><a href="/your-page-url-2">버튼 2</a></span>
-                    <span style="font-size: 18px;"><a href="/your-page-url-3">버튼 3</a></span>-->
+                    <span style="font-size: 18px;"><a href="/your-page-url-3">버튼 3</a></span>
                 </h2>
             </div>
 
@@ -155,6 +153,7 @@
                                         <th>Content</th>
                                         <th>User</th>
                                         <th>Created At</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -170,14 +169,14 @@
                                         <td th:text="${community.content}"></td>
                                         <td th:text="${community.user.id}"></td>
                                         <td th:text="${community.createAt}"></td>
-                                        <!--<td>
+                                        <td>
                                             <a th:href="@{/edit/{id}(id=${community.id})}">Edit</a>
                                             <a th:href="@{/delete/{id}(id=${community.id})}">Delete</a>
-                                        </td>-->
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" style="text-align: right;"> <!--colspan에 게시글 조회 란의 열 개수 쓰기-->
-                                            <a th:if="${#session != null && #session.getAttribute('user') != null}" href="/Kcommunity/form" class="button">글 작성</a>
+                                        <td colspan="8" style="text-align: right;"> <!--colspan에 게시글 조회 란의 열 개수 쓰기-->
+                                            <a th:if="${#session != null && #session.getAttribute('user') != null}" href="/add" class="button">글 작성</a>
                                             <a th:if="${#session == null || #session.getAttribute('user') == null}" href="/" onclick="alert('로그인이 필요합니다.'); return false;" class="button">글 작성</a>
                                         </td>
                                     </tr>
@@ -245,16 +244,16 @@
 
 <!-- Scripts -->
 <!-- Bootstrap core JavaScript -->
-<script src="../../vendor/jquery/jquery.min.js"></script>
-<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<script src="../../assets/js/isotope.min.js"></script>
-<script src="../../assets/js/owl-carousel.js"></script>
-<script src="../../assets/js/lightbox.js"></script>
-<script src="../../assets/js/tabs.js"></script>
-<script src="../../assets/js/video.js"></script>
-<script src="../../assets/js/slick-slider.js"></script>
-<script src="../../assets/js/custom.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/lightbox.js"></script>
+<script src="assets/js/tabs.js"></script>
+<script src="assets/js/video.js"></script>
+<script src="assets/js/slick-slider.js"></script>
+<script src="assets/js/custom.js"></script>
 <script>
     //according to loftblog tut
     $('.nav li:first').addClass('active');

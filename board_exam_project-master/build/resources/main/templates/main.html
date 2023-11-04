@@ -82,7 +82,7 @@
     <div class="header">
         <a th:if="${#session != null && #session.getAttribute('user') != null}" href="/add" class="button">자유 게시판 add</a>
         <a th:if="${#session == null || #session.getAttribute('user') == null}" href="/" onclick="alert('로그인이 필요합니다.'); return false;" class="button">자유 게시판 add</a>
-        <a href="/Kcommunity/list" class="button">자유 게시판 list</a>
+        <a href="/list" class="button">자유 게시판 list</a>
         <a href="/pdfup" class="button">PDF업로드</a>
         <a href="/pdftext" class="button">PDFtext</a>
         <a th:if="${#session != null && #session.getAttribute('user') != null}" href="/pdf" class="button">pdf리스트</a>
